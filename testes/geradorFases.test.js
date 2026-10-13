@@ -27,6 +27,8 @@ test('todas as 96 fases iniciam, tem jogada, obstaculos validos e objetivos alca
     for (const o of def.objetivos) {
       if (o.tipo === 'coletar') assert.ok(o.alvo <= def.jogadas * 1.6, 'coletar alto demais na fase ' + n);
       if (o.tipo === 'pontos') assert.ok(o.alvo >= def.jogadas * 200, 'pontos baixo demais na fase ' + n);
+      if (o.tipo === 'limparGelatina') assert.ok(o.alvo >= 4, 'gelatina trivial na fase ' + n);
+      if (['limparBoiada', 'limparFakeNews', 'quebrarBlocos'].includes(o.tipo)) assert.ok(o.alvo >= 2, o.tipo + ' trivial na fase ' + n);
     }
     const vistos = new Set();
     for (const o of def.obstaculos) {

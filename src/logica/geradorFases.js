@@ -52,8 +52,9 @@
 
     const desbloqueados = Object.keys(DESBLOQUEIO).filter((t) => n >= DESBLOQUEIO[t]);
     const contagem = {};
+    let tipos = [];
     if (desbloqueados.length) {
-      const tipos = rng.embaralhar(r, desbloqueados).slice(0, n > 25 ? 2 : 1);
+      tipos = rng.embaralhar(r, desbloqueados).slice(0, n > 25 ? 2 : 1);
       let qtd = Math.round((4 + 10 * d) * (respiro ? 0.5 : 1));
       if (chefe) qtd = Math.round(qtd / 2);
       for (let i = 0; i < qtd; i++) {
@@ -69,11 +70,14 @@
     }
 
     if (!chefe) {
+      // Objetivo de obstáculo só quando o tipo foi escolhido para a fase e há o bastante para
+      // não ser trivial (gelatina vinda do teto em MAXIMOS não conta como escolhida).
+      const camadasGel = def.obstaculos.filter((o) => o.tipo === 'gelatina').reduce((s, o) => s + (o.camadas || 1), 0);
       const opcoes = [];
-      if (contagem.gelatina) opcoes.push('limparGelatina');
-      if (contagem.boiada) opcoes.push('limparBoiada');
-      if (contagem.fakenews) opcoes.push('limparFakeNews');
-      if (contagem.bolsonaro) opcoes.push('quebrarBlocos');
+      if (tipos.includes('gelatina') && camadasGel >= 4) opcoes.push('limparGelatina');
+      if ((contagem.boiada || 0) >= 2) opcoes.push('limparBoiada');
+      if ((contagem.fakenews || 0) >= 2) opcoes.push('limparFakeNews');
+      if ((contagem.bolsonaro || 0) >= 2) opcoes.push('quebrarBlocos');
       const deObstaculo = opcoes.slice();
       opcoes.push('pontos', 'coletar');
       const quantos = n > 25 && !respiro ? 2 : 1;
@@ -83,7 +87,7 @@
       for (const tipo of escolhidos) {
         if (tipo === 'pontos') def.objetivos.push({ tipo, alvo: arred100((30 - 12 * d) * 300 * (1 + d)) });
         else if (tipo === 'coletar') def.objetivos.push({ tipo, peca: rng.escolher(r, def.pecas), alvo: 12 + Math.round(18 * d) });
-        else if (tipo === 'limparGelatina') def.objetivos.push({ tipo, alvo: def.obstaculos.filter((o) => o.tipo === 'gelatina').reduce((s, o) => s + (o.camadas || 1), 0) });
+        else if (tipo === 'limparGelatina') def.objetivos.push({ tipo, alvo: camadasGel });
         else if (tipo === 'limparBoiada') def.objetivos.push({ tipo, alvo: contagem.boiada });
         else if (tipo === 'limparFakeNews') def.objetivos.push({ tipo, alvo: contagem.fakenews });
         else if (tipo === 'quebrarBlocos') def.objetivos.push({ tipo, alvo: contagem.bolsonaro });
