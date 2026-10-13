@@ -2,7 +2,8 @@
 
 Coloque nesta pasta arquivos .mp3 com os nomes abaixo. Quando o arquivo existe, o jogo toca o clipe;
 quando não existe, o Chrome lê o texto com voz sintetizada; frases marcadas como "só áudio" ficam mudas sem arquivo.
-Nenhum áudio é distribuído com o jogo. A responsabilidade pelo conteúdo dos clipes é de quem os adiciona.
+Os marcados com [MDB] vêm do acervo do app Medo e Delírio em Brasília (github.com/rafaelclaycon/MedoDelirioBrasilia)
+e são baixados com: node ferramentas/puxar-audios.js
 
 == Lula ==
   lula-nunca-antes.mp3   "Nunca antes na história deste país!"
@@ -10,6 +11,10 @@ Nenhum áudio é distribuído com o jogo. A responsabilidade pelo conteúdo dos 
   lula-brasil-de-volta.mp3   "O Brasil está de volta!"
   lula-picanha.mp3   "O povo vai voltar a comer picanha e tomar uma cervejinha."
   lula-faz-o-l.mp3   "Faz o L!"
+  lula-esperanca.mp3   "A esperança finalmente venceu o medo."   [MDB]
+  lula-ze-gotinha.mp3   "Cadê o nosso querido Zé Gotinha?"   [MDB]
+  lula-vacina.mp3   "Eu vou tomar a minha vacina."   [MDB]
+  lula-deus-de-barro.mp3   "Deus de barro não dura muito tempo."   [MDB]
 
 == Alckmin ==
   alckmin-gag.mp3   "Gag de la gag!"
@@ -26,26 +31,33 @@ Nenhum áudio é distribuído com o jogo. A responsabilidade pelo conteúdo dos 
 == Dilma ==
   dilma-dobrar-meta.mp3   "Vamos dobrar a meta!"
   dilma-estocar-vento.mp3   "Estocar vento."
+  dilma-milho.mp3   "O milho!"   [MDB]
+  dilma-speak-slowly.mp3   "If you speak slowly, I understand very well."   [MDB]
 
 == Bolsonaro ==
-  bolso-coveiro.mp3   "Eu não sou coveiro, tá?"
-  bolso-e-dai.mp3   "E daí? Lamento."
-  bolso-gripezinha.mp3   "Uma gripezinha."
+  bolso-coveiro.mp3   "Eu não sou coveiro, tá ok?"   [MDB]
+  bolso-e-dai.mp3   "E daí?"   [MDB]
+  bolso-gripezinha.mp3   "Gripezinha ou resfriadinho."   [MDB]
   bolso-esgoto.mp3   "O cara pula em esgoto, sai, mergulha e não acontece nada."
   bolso-messias.mp3   "Eu sou Messias, mas não faço milagre."
+  bolso-virus-sou-eu.mp3   "Pra mídia, o vírus sou eu."   [MDB]
+  bolso-ousado.mp3   "Eu não sou médico, mas sou ousado."   [MDB]
+  bolso-vitoria-lula.mp3   "Vai dar vitória pro Lula, sem problema nenhum."   [MDB]
+  bolso-lamentamos.mp3   "O problema tá aí, lamentamos."   [MDB]
 
 == Salles ==
-  salles-boiada.mp3   "Passar a boiada!"
+  salles-boiada.mp3   "E ir passando a boiada."   [MDB]
+
+== Fake news ==
+  fakenews-valido.mp3   "Eu acho que até um fake news é válido, com todo o respeito."   [MDB]
+
+== Flávio ==
+  flavio-faz-sentido.mp3   "Faz algum sentido pra você isso?"   [MDB]
+  flavio-tios-zap.mp3   "Os tios e as tias do zap."   [MDB]
+  flavio-audio-calma.mp3   "Irmão, preferi te mandar o áudio aqui pra você ouvir com calma."   [MDB]
 
 == Damares ==
   damares-1.mp3   (só áudio)
 
 == Pazuello ==
   pazuello-1.mp3   (só áudio)
-
-== Fake news ==
-  fakenews-1.mp3   (só áudio)
-
-== Flávio ==
-  flavio-1.mp3   (só áudio)
-  flavio-2.mp3   (só áudio)

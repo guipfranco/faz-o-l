@@ -3,7 +3,7 @@
 Match-3 para Chrome: abra `index.html` com duplo clique. Funciona offline.
 
 - Frases dos personagens e suas fontes: `dados/frases.js`
-- Áudios: coloque arquivos `.mp3` em `audios/` com os nomes listados em `audios/LEIA-ME.txt`
+- Áudios: os clipes ligados ao acervo do app [Medo e Delírio em Brasília](https://github.com/rafaelclaycon/MedoDelirioBrasilia) já vêm em `audios/`; para baixá-los de novo, `node ferramentas/puxar-audios.js` (com `--forcar` para sobrescrever). Outros `.mp3` podem ser colocados lá com os nomes listados em `audios/LEIA-ME.txt`
 - Testes: `node --test`
 - Regerar mapa: `node ferramentas/construir-mapa.js`
 - Regerar arte: `node arte/gerar.js`
@@ -35,13 +35,13 @@ O objetivo é reconstruir o Brasil estado por estado. Cada fase vencida rende at
 
 ## Editar conteúdo
 
-- **Frases** (`dados/frases.js`): cada item tem `id`, `personagem`, `texto`, `gatilhos` (`match`, `L`, `estrela`, `vitoria`, `derrota`, `boiada`...), `contexto` e `fonte`. Toda frase com texto precisa de uma fonte (URL); o teste `testes/dados.test.js` confere isso. Frases com `somenteAudio: true` só tocam se existir o `.mp3` correspondente. Depois de editar, rode `node ferramentas/listar-audios.js` para atualizar `audios/LEIA-ME.txt`.
+- **Frases** (`dados/frases.js`): cada item tem `id`, `personagem`, `texto`, `gatilhos` (`match`, `L`, `estrela`, `vitoria`, `derrota`, `boiada`...), `contexto` e `fonte`. Toda frase com texto precisa de uma fonte (URL); o teste `testes/dados.test.js` confere isso. Frases com `somenteAudio: true` só tocam se existir o `.mp3` correspondente. Para ligar uma frase a um clipe do Medo e Delírio, ponha o id do clipe no campo `medoDelirio` (a lista completa está em `https://api.medodelirioios.com/api/v3/all-sounds`) e rode `node ferramentas/puxar-audios.js`. Depois de editar, rode `node ferramentas/listar-audios.js` para atualizar `audios/LEIA-ME.txt`.
 - **Fases manuais** (`dados/fases.js`): as 10 primeiras fases são escritas à mão (tamanho do tabuleiro, jogadas, peças, obstáculos, objetivos, limiares de estrelas e dica). As demais, até a 96, são geradas por `src/logica/geradorFases.js` com dificuldade crescente; uma fase manual com o mesmo número substitui a gerada.
 - **Rota de estados** (`dados/estados.js`): a lista `ROTA` define a ordem dos estados, a região, quantas fases cada um tem (a soma precisa dar 96) e a obra temática opcional (cisternas, reflorestamento, metrô, universidade).
 - Depois de qualquer edição, rode `node --test` na raiz do projeto.
 
 ## Nota jurídica
 
-- O jogo não embute áudios. A pasta `audios/` traz só a lista de nomes; quem adiciona os clipes responde pelo conteúdo deles.
+- A pasta `audios/` traz clipes recortados pelo app Medo e Delírio em Brasília a partir de falas públicas. A licença MIT do app cobre o código dele, não as falas; quem publica ou distribui o jogo responde pelo uso desses clipes.
 - As frases exibidas têm fonte registrada em `dados/frases.js`.
 - O uso de nomes, imagens, falas ou outros materiais de terceiros é responsabilidade de quem publica ou distribui o jogo.

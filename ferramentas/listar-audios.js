@@ -9,14 +9,15 @@ const linhas = [
   '',
   'Coloque nesta pasta arquivos .mp3 com os nomes abaixo. Quando o arquivo existe, o jogo toca o clipe;',
   'quando não existe, o Chrome lê o texto com voz sintetizada; frases marcadas como "só áudio" ficam mudas sem arquivo.',
-  'Nenhum áudio é distribuído com o jogo. A responsabilidade pelo conteúdo dos clipes é de quem os adiciona.',
+  'Os marcados com [MDB] vêm do acervo do app Medo e Delírio em Brasília (github.com/rafaelclaycon/MedoDelirioBrasilia)',
+  'e são baixados com: node ferramentas/puxar-audios.js',
   '',
 ];
 const porPersonagem = {};
 for (const f of frases.lista) (porPersonagem[f.personagem] = porPersonagem[f.personagem] || []).push(f);
 for (const [p, lista] of Object.entries(porPersonagem)) {
   linhas.push('== ' + (frases.NOMES[p] || p) + ' ==');
-  for (const f of lista) linhas.push('  ' + f.id + '.mp3' + (f.somenteAudio ? '   (só áudio)' : '   "' + f.texto + '"'));
+  for (const f of lista) linhas.push('  ' + f.id + '.mp3' + (f.somenteAudio ? '   (só áudio)' : '   "' + f.texto + '"') + (f.medoDelirio ? '   [MDB]' : ''));
   linhas.push('');
 }
 const destino = path.join(__dirname, '..', 'audios', 'LEIA-ME.txt');

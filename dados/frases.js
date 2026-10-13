@@ -8,6 +8,9 @@
   };
 
   // Edite à vontade. Regra: toda frase com texto precisa de fonte (URL).
+  // medoDelirio: id do clipe no acervo do app Medo e Delírio em Brasília; `node ferramentas/puxar-audios.js` baixa para audios/<id>.mp3.
+  const MDB = 'https://github.com/rafaelclaycon/MedoDelirioBrasilia';
+  const CLIPE = 'Clipe do app Medo e Delírio em Brasília';
   M.lista = [
     // Lula
     { id: 'lula-nunca-antes', personagem: 'lula', texto: 'Nunca antes na história deste país!', gatilhos: ['match', 'estrela'],
@@ -20,6 +23,14 @@
       contexto: 'Entrevista ao Jornal Nacional, agosto de 2022', fonte: 'https://sbtnews.sbt.com.br/noticia/politica/nao-esqueci-da-cervejinha-e-da-picanha-diz-lula-ao-comentar-que-queda-de-popularidade-nao-preocupa' },
     { id: 'lula-faz-o-l', personagem: 'lula', texto: 'Faz o L!', gatilhos: ['L'],
       contexto: 'Gesto e bordão da campanha de 2022', fonte: 'https://pt.wikipedia.org/wiki/Faz_o_L' },
+    { id: 'lula-esperanca', personagem: 'lula', texto: 'A esperança finalmente venceu o medo.', gatilhos: ['match', 'vitoria', 'estado'],
+      contexto: 'Discurso da vitória de 2002 (TV Câmara)', fonte: MDB, medoDelirio: '06BB6AC8-F3BF-4995-A7B1-0ECD5013D146' },
+    { id: 'lula-ze-gotinha', personagem: 'lula', texto: 'Cadê o nosso querido Zé Gotinha?', gatilhos: ['match'],
+      contexto: CLIPE, fonte: MDB, medoDelirio: 'DAF7180B-55B4-4499-B2F6-21E359707394' },
+    { id: 'lula-vacina', personagem: 'lula', texto: 'Eu vou tomar a minha vacina.', gatilhos: ['match'],
+      contexto: CLIPE, fonte: MDB, medoDelirio: '96B4C13C-4B27-433C-AE7A-0DAEEC3E644E' },
+    { id: 'lula-deus-de-barro', personagem: 'lula', texto: 'Deus de barro não dura muito tempo.', gatilhos: ['match', 'vitoria'],
+      contexto: CLIPE, fonte: MDB, medoDelirio: '603B63CC-9AE1-4043-884D-E8DD165B7259' },
 
     // Alckmin
     { id: 'alckmin-gag', personagem: 'alckmin', texto: 'Gag de la gag!', gatilhos: ['match'],
@@ -44,29 +55,54 @@
       contexto: 'Anúncio do Pronatec, julho de 2015', fonte: 'https://www.tnh1.com.br/noticia/nid/em-ato-dos-cem-dias-damares-parodia-dilma-e-diz-que-vai-dobrar-meta/' },
     { id: 'dilma-estocar-vento', personagem: 'dilma', texto: 'Estocar vento.', gatilhos: ['match'],
       contexto: 'Discurso sobre energia eólica', fonte: 'https://jus.com.br/artigos/43635/dilma-rousseff-e-o-vento-muito-alem-de-dilma' },
+    { id: 'dilma-milho', personagem: 'dilma', texto: 'O milho!', gatilhos: ['match'],
+      contexto: CLIPE, fonte: MDB, medoDelirio: 'DCFB6973-3567-448D-B424-3C3A0AEDAAB2' },
+    { id: 'dilma-speak-slowly', personagem: 'dilma', texto: 'If you speak slowly, I understand very well.', gatilhos: ['match'],
+      contexto: CLIPE, fonte: MDB, medoDelirio: '91BDE728-E258-4C22-A8F9-0D54976A0C09' },
 
     // Bolsonaro (obstáculo)
-    { id: 'bolso-coveiro', personagem: 'bolsonaro', texto: 'Eu não sou coveiro, tá?', gatilhos: ['match', 'derrota'],
-      contexto: '20/04/2020', fonte: 'https://www.poder360.com.br/coronavirus/2-anos-de-covid-relembre-30-frases-de-bolsonaro-sobre-pandemia/' },
-    { id: 'bolso-e-dai', personagem: 'bolsonaro', texto: 'E daí? Lamento.', gatilhos: ['match', 'derrota'],
-      contexto: 'Abril de 2020', fonte: 'https://www.poder360.com.br/coronavirus/2-anos-de-covid-relembre-30-frases-de-bolsonaro-sobre-pandemia/' },
-    { id: 'bolso-gripezinha', personagem: 'bolsonaro', texto: 'Uma gripezinha.', gatilhos: ['match'],
-      contexto: 'Março de 2020', fonte: 'https://www.poder360.com.br/coronavirus/2-anos-de-covid-relembre-30-frases-de-bolsonaro-sobre-pandemia/' },
+    { id: 'bolso-coveiro', personagem: 'bolsonaro', texto: 'Eu não sou coveiro, tá ok?', gatilhos: ['match', 'derrota'],
+      contexto: '20/04/2020', fonte: 'https://www.poder360.com.br/coronavirus/2-anos-de-covid-relembre-30-frases-de-bolsonaro-sobre-pandemia/',
+      medoDelirio: 'EEDCDF2D-EB90-4D99-A33E-3C16710601C4' },
+    { id: 'bolso-e-dai', personagem: 'bolsonaro', texto: 'E daí?', gatilhos: ['match', 'derrota'],
+      contexto: 'Abril de 2020', fonte: 'https://www.poder360.com.br/coronavirus/2-anos-de-covid-relembre-30-frases-de-bolsonaro-sobre-pandemia/',
+      medoDelirio: '08B6CB06-28E1-4A6D-934E-B5E715D56C05' },
+    { id: 'bolso-gripezinha', personagem: 'bolsonaro', texto: 'Gripezinha ou resfriadinho.', gatilhos: ['match'],
+      contexto: 'Março de 2020', fonte: 'https://www.poder360.com.br/coronavirus/2-anos-de-covid-relembre-30-frases-de-bolsonaro-sobre-pandemia/',
+      medoDelirio: '67A4DE46-4CCA-42F7-945D-7AB86C95B5E0' },
     { id: 'bolso-esgoto', personagem: 'bolsonaro', texto: 'O cara pula em esgoto, sai, mergulha e não acontece nada.', gatilhos: ['match'],
       contexto: '26/03/2020', fonte: 'https://www.poder360.com.br/coronavirus/2-anos-de-covid-relembre-30-frases-de-bolsonaro-sobre-pandemia/' },
     { id: 'bolso-messias', personagem: 'bolsonaro', texto: 'Eu sou Messias, mas não faço milagre.', gatilhos: ['match', 'derrota'],
       contexto: 'Abril de 2020', fonte: 'https://www.poder360.com.br/coronavirus/2-anos-de-covid-relembre-30-frases-de-bolsonaro-sobre-pandemia/' },
+    { id: 'bolso-virus-sou-eu', personagem: 'bolsonaro', texto: 'Pra mídia, o vírus sou eu.', gatilhos: ['match'],
+      contexto: CLIPE, fonte: MDB, medoDelirio: 'EEFBA8B5-AA66-4602-AE24-5F3C1070BEBC' },
+    { id: 'bolso-ousado', personagem: 'bolsonaro', texto: 'Eu não sou médico, mas sou ousado.', gatilhos: ['match'],
+      contexto: CLIPE, fonte: MDB, medoDelirio: 'DB99A7ED-00D3-444C-89B6-BB24B9801014' },
+    { id: 'bolso-vitoria-lula', personagem: 'bolsonaro', texto: 'Vai dar vitória pro Lula, sem problema nenhum.', gatilhos: ['match'],
+      contexto: CLIPE, fonte: MDB, medoDelirio: '1E88A1C3-33EB-4E82-A256-435CB40D821D' },
+    { id: 'bolso-lamentamos', personagem: 'bolsonaro', texto: 'O problema tá aí, lamentamos.', gatilhos: ['match', 'derrota'],
+      contexto: CLIPE, fonte: MDB, medoDelirio: '48F350A2-FC0F-4B07-9FE6-DBAF8BCFC3B7' },
 
     // Salles (boiada)
-    { id: 'salles-boiada', personagem: 'salles', texto: 'Passar a boiada!', gatilhos: ['match', 'boiada'],
-      contexto: 'Reunião ministerial de 22/04/2020', fonte: 'https://g1.globo.com/politica/noticia/2020/05/22/ministro-do-meio-ambiente-defende-passar-a-boiada-e-mudar-regras-enquanto-atencao-da-midia-esta-voltada-para-a-covid-19.ghtml' },
+    { id: 'salles-boiada', personagem: 'salles', texto: 'E ir passando a boiada.', gatilhos: ['match', 'boiada'],
+      contexto: 'Reunião ministerial de 22/04/2020', fonte: 'https://g1.globo.com/politica/noticia/2020/05/22/ministro-do-meio-ambiente-defende-passar-a-boiada-e-mudar-regras-enquanto-atencao-da-midia-esta-voltada-para-a-covid-19.ghtml',
+      medoDelirio: '19DE07D2-E3CC-488E-86AF-C02BD42E3964' },
 
-    // Só com áudio fornecido pelo dono do jogo (sem texto verificado)
+    // Fake news (fala do Bolsonaro)
+    { id: 'fakenews-valido', personagem: 'fakenews', texto: 'Eu acho que até um fake news é válido, com todo o respeito.', gatilhos: ['match'],
+      contexto: 'Jair Bolsonaro. ' + CLIPE, fonte: MDB, medoDelirio: '5702813A-AC05-474E-9628-2D6F32EB192E' },
+
+    // Flávio (chefe)
+    { id: 'flavio-faz-sentido', personagem: 'flavio', texto: 'Faz algum sentido pra você isso?', gatilhos: ['match'],
+      contexto: CLIPE, fonte: MDB, medoDelirio: 'DFF24FB0-9FD5-44A1-8DF6-3D5CD7F9FA9F' },
+    { id: 'flavio-tios-zap', personagem: 'flavio', texto: 'Os tios e as tias do zap.', gatilhos: ['match'],
+      contexto: CLIPE, fonte: MDB, medoDelirio: '79866084-F57B-4D8E-BDB4-AB8AAF33B063' },
+    { id: 'flavio-audio-calma', personagem: 'flavio', texto: 'Irmão, preferi te mandar o áudio aqui pra você ouvir com calma.', gatilhos: ['match'],
+      contexto: CLIPE, fonte: MDB, medoDelirio: '68D5081A-27D7-4F70-BC36-C9D3DFCEF738' },
+
+    // Só com áudio fornecido pelo dono do jogo (sem texto verificado; hoje a gelatina e a corrente não falam)
     { id: 'damares-1', personagem: 'damares', texto: null, somenteAudio: true, gatilhos: ['match'], contexto: 'Coloque audios/damares-1.mp3' },
     { id: 'pazuello-1', personagem: 'pazuello', texto: null, somenteAudio: true, gatilhos: ['match'], contexto: 'Coloque audios/pazuello-1.mp3' },
-    { id: 'fakenews-1', personagem: 'fakenews', texto: null, somenteAudio: true, gatilhos: ['match'], contexto: 'Coloque audios/fakenews-1.mp3' },
-    { id: 'flavio-1', personagem: 'flavio', texto: null, somenteAudio: true, gatilhos: ['match'], contexto: 'Coloque audios/flavio-1.mp3' },
-    { id: 'flavio-2', personagem: 'flavio', texto: null, somenteAudio: true, gatilhos: ['match'], contexto: 'Coloque audios/flavio-2.mp3' },
   ];
 
   if (typeof module !== 'undefined' && module.exports) module.exports = M;
