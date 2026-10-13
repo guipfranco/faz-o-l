@@ -37,6 +37,26 @@
   voz.mudo(progresso.audio().mudo);
   voz.volume(progresso.audio().volume);
 
+  // "Plim" curto para match simples: seno de ~880 Hz por 90 ms, gerado na hora (sem arquivo).
+  let ctxAudio = null;
+  function plim() {
+    if (voz.mudo() || voz.volume() <= 0) return;
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      if (!ctxAudio) ctxAudio = new Ctx();
+      if (ctxAudio.state === 'suspended') ctxAudio.resume();
+      const t = ctxAudio.currentTime, osc = ctxAudio.createOscillator(), ganho = ctxAudio.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, t);
+      ganho.gain.setValueAtTime(0.0001, t);
+      ganho.gain.exponentialRampToValueAtTime(Math.max(0.0002, 0.35 * voz.volume()), t + 0.01);
+      ganho.gain.exponentialRampToValueAtTime(0.0001, t + 0.09);
+      osc.connect(ganho); ganho.connect(ctxAudio.destination);
+      osc.start(t); osc.stop(t + 0.1);
+    } catch (e) { /* sem áudio: segue em silêncio */ }
+  }
+
   function alternarMudo() { const m = !voz.mudo(); voz.mudo(m); progresso.definirAudio({ mudo: m }); if (m && window.speechSynthesis) window.speechSynthesis.cancel(); return m; }
 
   const mapa = F.ui.mapa.criar({
@@ -89,8 +109,11 @@
     if (!confirmarApagar) { confirmarApagar = true; ev.target.textContent = 'Tem certeza? Clique de novo'; setTimeout(() => { confirmarApagar = false; ev.target.textContent = 'Apagar progresso'; }, 4000); return; }
     progresso.apagar(); confirmarApagar = false; ev.target.textContent = 'Progresso apagado';
   });
+  const volumeEl = el('volume');
+  volumeEl.value = String(progresso.audio().volume);
+  volumeEl.addEventListener('input', () => { const v = Number(volumeEl.value); voz.volume(v); progresso.definirAudio({ volume: v }); });
   if (!progresso.persistente) { const p = document.createElement('p'); p.className = 'rodape'; p.textContent = 'Aviso: o navegador bloqueou o armazenamento; o progresso não será salvo.'; el('menu').appendChild(p); }
 
-  F.ui.app = { progresso, voz, mapa, iniciarFase, alternarMudo };
+  F.ui.app = { progresso, voz, mapa, iniciarFase, alternarMudo, plim };
   F.ui.alternarMudo = alternarMudo;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

@@ -23,6 +23,8 @@
 
     create() {
       raiz.FazOL.ui.cenaAtual = this;
+      this.velocidadeNormal();
+      this.confirmarSair = false;
       this.estado = L.turno.iniciarFase(this.def);
       this.ocupado = false; this.selecionada = null; this.arraste = null; this.dicaTweens = []; this.terminou = false; this.saindo = false;
       const largTab = this.estado.colunas * TAM, altTab = this.estado.linhas * TAM;
@@ -68,7 +70,15 @@
       const uf = D.estados.porSigla[this.def.estado];
       const estilo = (tam, cor, peso) => ({ fontFamily: FONTE, fontSize: tam + 'px', color: cor || '#f4f4f4', fontStyle: peso || 'bold' });
       this.add.text(20, 14, 'Fase ' + this.def.numero + ' · ' + (uf ? uf.nome : ''), estilo(20, '#ffdf00')).setDepth(10);
-      this.add.text(LARG - 20, 14, 'Mapa', estilo(18)).setOrigin(1, 0).setDepth(10).setInteractive({ useHandCursor: true }).on('pointerdown', () => { if (!this.ocupado) this.sair('mapa'); });
+      // Sair pede confirmação: o primeiro toque vira "Sair?" por 3 s, o segundo sai.
+      this.btnMapa = this.add.text(LARG - 20, 14, 'Mapa', estilo(18)).setOrigin(1, 0).setDepth(10).setInteractive({ useHandCursor: true }).on('pointerdown', () => {
+        if (this.ocupado) return;
+        if (this.confirmarSair) { this.sair('mapa'); return; }
+        this.confirmarSair = true;
+        this.btnMapa.setText('Sair?');
+        if (this.timerSair) this.timerSair.remove(false);
+        this.timerSair = this.time.delayedCall(3000, () => { this.confirmarSair = false; if (this.btnMapa && this.btnMapa.active) this.btnMapa.setText('Mapa'); });
+      });
       this.btnMudo = this.add.text(LARG - 90, 12, this.voz.mudo() ? '🔇' : '🔊', estilo(20)).setOrigin(1, 0).setDepth(10).setInteractive({ useHandCursor: true })
         .on('pointerdown', () => { raiz.FazOL.ui.alternarMudo(); this.btnMudo.setText(this.voz.mudo() ? '🔇' : '🔊'); });
       this.txtJogadas = this.add.text(20, 46, '', estilo(44)).setDepth(10);
@@ -142,7 +152,7 @@
       for (let l = 0; l < e.linhas; l++) for (let c = 0; c < e.colunas; c++) {
         const cel = e.celulas[l][c]; if (!cel) continue;
         const k = this.chave({ l, c }), p = this.pos(l, c), s = {};
-        if (cel.gelatina > 0) s.gel = this.add.image(p.x, p.y, 'obst-damares').setDisplaySize(TAM - 2, TAM - 2).setAlpha(cel.gelatina >= 2 ? 1 : 0.85).setDepth(1);
+        if (cel.gelatina > 0) s.gel = this.desenharGelatina(this.add.container(p.x, p.y).setDepth(2.5), cel.gelatina);
         if (cel.peca) s.peca = this.criarPeca(l, c, cel);
         if (cel.bloco && cel.bloco.tipo !== 'chefe') {
           s.obst = this.add.image(p.x, p.y, TEX_OBST[cel.bloco.tipo]).setDisplaySize(TAM - 6, TAM - 6).setDepth(3);
@@ -162,12 +172,28 @@
         ]);
       }
     }
+    // Gelatina fica por cima da peça: moldura rosa translúcida; 2 camadas ganham contorno interno e selo "2".
+    desenharGelatina(cont, camadas) {
+      cont.removeAll(true);
+      const g = this.add.graphics(), h = TAM / 2 - 3;
+      g.fillStyle(0xff5fa2, 0.22); g.fillRoundedRect(-h, -h, h * 2, h * 2, 10);
+      g.lineStyle(5, 0xff5fa2, 0.95); g.strokeRoundedRect(-h, -h, h * 2, h * 2, 10);
+      cont.add(g);
+      if (camadas >= 2) {
+        g.lineStyle(3, 0xffffff, 0.8); g.strokeRoundedRect(-h + 7, -h + 7, h * 2 - 14, h * 2 - 14, 7);
+        g.fillStyle(0xff5fa2, 1); g.fillCircle(h - 6, -h + 6, 10);
+        cont.add(this.add.text(h - 6, -h + 6, '2', { fontFamily: FONTE, fontSize: '14px', color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5));
+      }
+      return cont;
+    }
     spriteDe(p) { const s = this.sprites[this.chave(p)]; return s ? s.peca : null; }
 
     // --- input ---
     configurarInput() {
       this.input.on('pointerdown', (p) => {
-        if (this.ocupado || this.terminou) return;
+        // Tocar durante as animações acelera tudo (4x) até o fim da jogada.
+        if (this.ocupado) { this.tweens.timeScale = 4; this.time.timeScale = 4; return; }
+        if (this.terminou) return;
         this.agendarDica();
         const cel = this.celulaEmPixel(p.x, p.y);
         if (!cel) { this.selecionar(null); return; }
@@ -204,11 +230,14 @@
       this.ocupado = true;
       this.cancelarDica();
       try { await this.animar(r.eventos); } catch (e) { console.error('animacao', e); }
+      this.velocidadeNormal();
       this.sincronizar();
       this.atualizarHUD();
       this.ocupado = false;
       if (this.estado.status !== 'jogando') this.terminar(); else this.agendarDica();
     }
+
+    velocidadeNormal() { this.tweens.timeScale = 1; this.time.timeScale = 1; }
 
     // --- animação de eventos ---
     tw(cfg) {
@@ -236,6 +265,15 @@
           }
           case 'match': {
             if (ev.tamanho >= 4 || ev.especial || ev.cascata >= 3) falaPendente = { personagem: ev.peca, gatilho: 'match' };
+            else {
+              // Match simples de 3: só um "plim" e o nome da peça, sem balão.
+              const app = raiz.FazOL.ui.app;
+              if (app && app.plim) app.plim();
+              let sx = 0, sy = 0;
+              for (const c of ev.celulas) { const p = this.pos(c.l, c.c); sx += p.x; sy += p.y; }
+              const n = ev.celulas.length || 1;
+              this.rotuloFlutuante(sx / n, sy / n - 18, this.nomes[ev.peca] || ev.peca);
+            }
             await this.tw({ targets: ev.celulas.map((p) => this.spriteDe(p)), scale: 1.15, duration: 90, yoyo: true });
             break;
           }
@@ -343,7 +381,7 @@
       }
       for (const o of ev.obstaculos) {
         const k = this.chave(o), s = this.sprites[k] || {}, p = this.pos(o.l, o.c);
-        if (o.tipo === 'gelatina') { this.particulas(p.x, p.y, 0xff5fa2, 8); if (s.gel) { if (o.destruido) { alvos.push(s.gel); s.gel = null; } else s.gel.setAlpha(0.85); } }
+        if (o.tipo === 'gelatina') { this.particulas(p.x, p.y, 0xff5fa2, 8); if (s.gel) { if (o.destruido) { alvos.push(s.gel); s.gel = null; } else this.desenharGelatina(s.gel, o.vida || 1); } }
         else if (o.tipo === 'corrente') { this.particulas(p.x, p.y, 0x9aa0a6, 8); if (s.corrente) { alvos.push(s.corrente); s.corrente = null; } }
         else if (o.tipo === 'chefe') { this.particulas(p.x, p.y, 0xc8102e, 14); if (this.spriteChefe) this.tweens.add({ targets: this.spriteChefe, x: this.spriteChefe.x + 6, duration: 40, yoyo: true, repeat: 3 }); }
         else {
@@ -363,6 +401,10 @@
     textoFlutuante(x, y, txt) {
       const t = this.add.text(x, y, txt, { fontFamily: FONTE, fontSize: '24px', color: '#ffdf00', fontStyle: 'bold', stroke: '#000', strokeThickness: 4 }).setOrigin(0.5).setDepth(7);
       this.tweens.add({ targets: t, y: y - 50, alpha: 0, duration: 700, onComplete: () => t.destroy() });
+    }
+    rotuloFlutuante(x, y, txt) {
+      const t = this.add.text(x, y, txt, { fontFamily: FONTE, fontSize: '16px', color: '#ffffff', fontStyle: 'bold', stroke: '#000', strokeThickness: 3 }).setOrigin(0.5).setDepth(7);
+      this.tweens.add({ targets: t, y: y - 36, alpha: 0, duration: 650, onComplete: () => t.destroy() });
     }
     flash(cor, alpha) {
       const r = this.add.rectangle(LARG / 2, ALT / 2, LARG, ALT, cor, alpha).setDepth(8);
