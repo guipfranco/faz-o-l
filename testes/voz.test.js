@@ -47,6 +47,20 @@ test('sem mp3 fica so o balao, sem voz sintetizada', async () => {
   assert.equal(env.reg.baloes[0].texto, 'Faz o L');
 });
 
+test('personagem sem frase cede a vez a torcida, e o balao mostra quem falou de verdade', () => {
+  const baloes = [];
+  const api = voz.criar({
+    frases: [{ id: 'torcida-x', personagem: 'torcida', texto: 'X', gatilhos: ['bomba'], quem: 'Paulo Guedes' }],
+    nomes: { marina: 'Marina', torcida: 'Torcida' },
+    aoBalao: (b) => baloes.push(b), agora: () => 0, agendar: () => {},
+  });
+  api.falar({ personagem: 'marina', gatilho: 'bomba' });
+  assert.equal(baloes.length, 1);
+  assert.equal(baloes[0].personagem, 'torcida');
+  assert.equal(baloes[0].nome, 'Paulo Guedes');
+  assert.equal(baloes[0].texto, 'X');
+});
+
 test('somenteAudio sem arquivo: so balao com o nome', async () => {
   const env = ambiente();
   env.api.falar({ personagem: 'flavio' });

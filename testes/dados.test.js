@@ -32,14 +32,21 @@ test('frases tem id unico, personagem conhecido e fonte ou somenteAudio', () => 
     assert.ok(!ids.has(f.id), 'id repetido ' + f.id); ids.add(f.id);
     assert.ok(frases.NOMES[f.personagem], 'personagem desconhecido ' + f.personagem);
     if (f.somenteAudio) assert.equal(f.texto, null);
-    else { assert.ok(typeof f.texto === 'string' && f.texto.length > 0, f.id); assert.match(f.fonte, /^https?:\/\//, 'sem fonte: ' + f.id); }
+    else {
+      assert.ok(typeof f.texto === 'string' && f.texto.length > 0, f.id);
+      assert.match(f.fonte, /^https?:\/\//, 'sem fonte: ' + f.id);
+      assert.ok(f.medoDelirio, 'frase sem clipe real: ' + f.id);
+    }
   }
-  for (const p of ['lula', 'alckmin', 'marina', 'boulos', 'dilma', 'bolsonaro', 'salles']) {
-    assert.ok(frases.lista.some((f) => f.personagem === p && !f.somenteAudio), 'sem frase com texto para ' + p);
-  }
-  assert.ok(frases.lista.some((f) => f.personagem === 'lula' && (f.gatilhos || []).includes('L')));
-  assert.ok(frases.lista.some((f) => f.personagem === 'lula' && (f.gatilhos || []).includes('vitoria')));
-  assert.ok(frases.lista.some((f) => f.personagem === 'bolsonaro' && (f.gatilhos || []).includes('derrota')));
+});
+
+test('cada combinacao e cada obstaculo que fala tem pelo menos 3 falas', () => {
+  const contar = (p, g) => frases.lista.filter((f) => f.personagem === p && !f.somenteAudio && (f.gatilhos || []).includes(g)).length;
+  for (const g of frases.GATILHOS_DE_COMBINACAO) assert.ok(contar('torcida', g) >= 3, 'poucas falas da torcida para ' + g);
+  assert.ok(contar('torcida', 'match') >= 3, 'poucas falas de reserva da torcida');
+  assert.ok(contar('bolsonaro', 'derrota') >= 3, 'poucas falas de derrota');
+  assert.ok(contar('salles', 'boiada') >= 3, 'poucas falas da boiada');
+  for (const p of ['bolsonaro', 'salles', 'fakenews', 'flavio']) assert.ok(contar(p, 'match') >= 3, 'poucas falas para ' + p);
 });
 
 test('fases manuais 1 a 10 sao consistentes', () => {

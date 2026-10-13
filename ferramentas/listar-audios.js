@@ -17,7 +17,7 @@ const porPersonagem = {};
 for (const f of frases.lista) (porPersonagem[f.personagem] = porPersonagem[f.personagem] || []).push(f);
 for (const [p, lista] of Object.entries(porPersonagem)) {
   linhas.push('== ' + (frases.NOMES[p] || p) + ' ==');
-  for (const f of lista) linhas.push('  ' + f.id + '.mp3' + (f.somenteAudio ? '   (só áudio)' : '   "' + f.texto + '"') + (f.medoDelirio ? '   [MDB]' : ''));
+  for (const f of lista) linhas.push('  ' + f.id + '.mp3' + (f.somenteAudio ? '   (só áudio)' : '   "' + f.texto + '"' + (f.quem ? ' (' + f.quem + ')' : '')) + (f.medoDelirio ? '   [MDB]' : ''));
   linhas.push('');
 }
 const destino = path.join(__dirname, '..', 'audios', 'LEIA-ME.txt');

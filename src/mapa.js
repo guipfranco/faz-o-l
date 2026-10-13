@@ -91,7 +91,7 @@
       if (!r) return;
       if (r.concluiuEstado) {
         confete();
-        if (voz) voz.falar({ personagem: 'lula', gatilho: 'estado' });
+        if (voz) voz.falar({ personagem: 'torcida', gatilho: 'estado' });
         if (r.proximo) selecionado = r.proximo;
       }
       atualizar();

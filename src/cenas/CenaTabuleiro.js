@@ -7,6 +7,9 @@
   const ROTULO = { pontos: 'Pontos', coletar: 'Coletar', limparGelatina: 'Gelatina', limparBoiada: 'Boiada', limparFakeNews: 'Fake news', quebrarBlocos: 'Blocos', chefe: 'Chefe' };
   const FONTE = 'Segoe UI, system-ui, sans-serif';
   const espera = (cena, ms) => new Promise((r) => cena.time.delayedCall(ms, r));
+  // Cada combinação tem falas próprias da torcida em dados/frases.js.
+  const GATILHO_DO_ESPECIAL = { listradaH: 'listrada', listradaV: 'listrada', bomba: 'bomba', estrela: 'estrela', L: 'L' };
+  const torcida = (gatilho) => ({ personagem: 'torcida', gatilho });
 
   class CenaTabuleiro extends Phaser.Scene {
     constructor() { super({ key: 'Tabuleiro' }); }
@@ -264,7 +267,9 @@
             break;
           }
           case 'match': {
-            if (ev.tamanho >= 4 || ev.especial || ev.cascata >= 3) falaPendente = { personagem: ev.peca, gatilho: 'match' };
+            if (ev.especial) falaPendente = torcida(GATILHO_DO_ESPECIAL[ev.especial] || 'match');
+            else if (ev.cascata >= 3) falaPendente = torcida('cascata');
+            else if (ev.tamanho >= 4) falaPendente = { personagem: ev.peca, gatilho: 'match' };
             else {
               // Match simples de 3: só um "plim" e o nome da peça, sem balão.
               const app = raiz.FazOL.ui.app;
@@ -278,16 +283,16 @@
             break;
           }
           case 'especialAtivado': {
-            if (ev.especial === 'L') { falaPendente = { personagem: 'lula', gatilho: 'L' }; await this.efeitoL(ev); }
-            else if (ev.especial === 'estrela') { falaPendente = { personagem: 'lula', gatilho: 'estrela' }; this.flash(0xffffff, 0.5); }
+            if (ev.especial === 'L') { falaPendente = torcida('L'); await this.efeitoL(ev); }
+            else if (ev.especial === 'estrela') { falaPendente = torcida('estrela'); this.flash(0xffffff, 0.5); }
+            // Listrada ou bomba detonada: fala o aliado da peça (ou a torcida, se ele não tiver frase).
             else if (!falaPendente) falaPendente = { personagem: ev.peca || 'lula', gatilho: 'match' };
             this.destacarArea(ev.celulas, ev.especial);
             await espera(this, 120);
             break;
           }
           case 'combo': {
-            const temL = ev.especiais.includes('L');
-            falaPendente = { personagem: temL ? 'lula' : (ev.peca || 'lula'), gatilho: temL ? 'L' : 'match' };
+            falaPendente = torcida('combo');
             this.flash(0xffdf00, 0.35);
             this.destacarArea(ev.celulas, 'combo');
             await espera(this, 160);
@@ -296,7 +301,9 @@
           case 'limpar': {
             const golpes = ev.obstaculos.filter((o) => o.tipo !== 'gelatina' && o.tipo !== 'corrente');
             const destaque = golpes.find((o) => o.destruido) || golpes[0];
-            if (destaque) this.voz.falar({ personagem: L.obstaculos.PERSONAGEM[destaque.tipo], gatilho: 'match' });
+            // A fala da combinação vence a do obstáculo atingido, que vence a do aliado.
+            if (falaPendente && falaPendente.personagem === 'torcida') this.voz.falar(falaPendente);
+            else if (destaque) this.voz.falar({ personagem: L.obstaculos.PERSONAGEM[destaque.tipo], gatilho: 'match' });
             else if (falaPendente) this.voz.falar(falaPendente);
             falaPendente = null;
             await this.animarLimpeza(ev);
@@ -362,7 +369,7 @@
             break;
           case 'fim':
             this.atualizarHUD();
-            if (ev.status === 'vitoria') this.voz.falar({ personagem: 'lula', gatilho: 'vitoria' });
+            if (ev.status === 'vitoria') this.voz.falar(torcida('vitoria'));
             else if (ev.status === 'derrota') this.voz.falar({ personagem: 'bolsonaro', gatilho: 'derrota' });
             break;
           default: break;

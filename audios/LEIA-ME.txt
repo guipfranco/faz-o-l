@@ -6,55 +6,77 @@ Os marcados com [MDB] vêm do acervo do app Medo e Delírio em Brasília (github
 e são baixados com: node ferramentas/puxar-audios.js
 
 == Lula ==
-  lula-nunca-antes.mp3   "Nunca antes na história deste país!"
-  lula-sou-uma-ideia.mp3   "Eu não sou mais um ser humano, eu sou uma ideia."
-  lula-brasil-de-volta.mp3   "O Brasil está de volta!"
-  lula-picanha.mp3   "O povo vai voltar a comer picanha e tomar uma cervejinha."
-  lula-faz-o-l.mp3   "Faz o L!"
-  lula-esperanca.mp3   "A esperança finalmente venceu o medo."   [MDB]
   lula-ze-gotinha.mp3   "Cadê o nosso querido Zé Gotinha?"   [MDB]
   lula-vacina.mp3   "Eu vou tomar a minha vacina."   [MDB]
   lula-deus-de-barro.mp3   "Deus de barro não dura muito tempo."   [MDB]
 
-== Alckmin ==
-  alckmin-gag.mp3   "Gag de la gag!"
-  alckmin-dr-geraldo.mp3   "Dr. Geraldo responde."
-
-== Marina ==
-  marina-boiadas.mp3   "Boiadas se passaram no lugar onde apenas deveriam se passar políticas de proteção ambiental."
-  marina-apatia.mp3   "A maior ameaça ambiental no Brasil é a apatia."
-
-== Boulos ==
-  boulos-vai-vencer.mp3   "Não foi nessa eleição, mas a gente vai ganhar!"
-  boulos-nao-por-eleicao.mp3   "Nós não estamos na política por causa de eleição."
-
 == Dilma ==
-  dilma-dobrar-meta.mp3   "Vamos dobrar a meta!"
-  dilma-estocar-vento.mp3   "Estocar vento."
   dilma-milho.mp3   "O milho!"   [MDB]
   dilma-speak-slowly.mp3   "If you speak slowly, I understand very well."   [MDB]
+
+== Torcida ==
+  torcida-certissimo.mp3   "Tá certíssimo." (Luiz Henrique Mandetta)   [MDB]
+  torcida-olha-so.mp3   "Olha só!" (Mauro Reginato)   [MDB]
+  torcida-que-demais.mp3   "Que demais!" (André Starqueza)   [MDB]
+  torcida-exatamente.mp3   "Exatamente." (Jorge Kajuru)   [MDB]
+  torcida-virou-passeio.mp3   "Virou passeio!" (Galvão Bueno)   [MDB]
+  torcida-que-beleza.mp3   "Que beleza!" (Milton Leite)   [MDB]
+  torcida-acelera.mp3   "Celera bem, acelera!" (A Mãe Copilota)   [MDB]
+  torcida-olha-que-legal.mp3   "Olha que legal!" (Mauro Reginato)   [MDB]
+  torcida-bombando.mp3   "A economia tá bombando." (Paulo Guedes)   [MDB]
+  torcida-agora-aguenta.mp3   "Agora tu aguenta!" (Dudu Marfetan)   [MDB]
+  torcida-pra-machucar.mp3   "Essa é pra machucar!" (Grupo Menos é Mais)   [MDB]
+  torcida-temperatura.mp3   "A temperatura subiu." (Jair Bolsonaro)   [MDB]
+  torcida-maravilhoso.mp3   "Maravilhoso!" (Milton Cunha)   [MDB]
+  torcida-aleluia.mp3   "Aleluia!" (Händel)   [MDB]
+  torcida-um-genio.mp3   "Um gênio!" (Pica-Pau)   [MDB]
+  torcida-satisfacao.mp3   "Que satisfação, aspira!" (Milhem Cortaz (Tropa de Elite))   [MDB]
+  torcida-barba.mp3   "Eu vou votar no barba, maluco, não tem jeito." (Casimiro)   [MDB]
+  torcida-bicampeao.mp3   "Lula é bicampeão mundial de conciliação." (Franciel Cruz)   [MDB]
+  torcida-vitoria-lula.mp3   "Vai dar vitória pro Lula, sem problema nenhum." (Jair Bolsonaro)   [MDB]
+  torcida-lula-em-22.mp3   "Quem não tá contente comigo tem Lula em 22." (Jair Bolsonaro)   [MDB]
+  torcida-festa-danada.mp3   "Uma festa danada!" (Paulo Guedes)   [MDB]
+  torcida-mix-insanidade.mp3   "Mix de insanidade!" (Cristiano Botafogo)   [MDB]
+  torcida-carnaval.mp3   "É energia aqui, ó, tá em cima. Carnaval, alegria!" (Renan (Choque de Cultura))   [MDB]
+  torcida-ieie.mp3   "Iéié, ráá!" (Sérgio Mallandro)   [MDB]
+  torcida-calma-que-piora.mp3   "Calma que piora." (Marcelo Adnet)   [MDB]
+  torcida-sonhar.mp3   "Eles tão deixando a gente sonhar." (Ronaldinho Gaúcho)   [MDB]
+  torcida-rimou.mp3   "Rimou!" (Rafa Chalub)   [MDB]
+  torcida-que-fase.mp3   "Que fase!" (Milton Leite)   [MDB]
+  lula-esperanca.mp3   "A esperança finalmente venceu o medo." (Lula)   [MDB]
+  torcida-brasil.mp3   "Brasil!" (Gil do Vigor)   [MDB]
+  torcida-milicia.mp3   "Vencemos a milícia sem dar um tiro." (Gregório Duvivier)   [MDB]
+  torcida-missao-cumprida.mp3   "Missão cumprida." (Eduardo Pazuello)   [MDB]
+  torcida-vamos-sonhar.mp3   "Vamos sonhar?" (Pedro Doria)   [MDB]
+  torcida-que-lindo.mp3   "Que lindo, cara!" (Lui Mendes)   [MDB]
 
 == Bolsonaro ==
   bolso-coveiro.mp3   "Eu não sou coveiro, tá ok?"   [MDB]
   bolso-e-dai.mp3   "E daí?"   [MDB]
   bolso-gripezinha.mp3   "Gripezinha ou resfriadinho."   [MDB]
-  bolso-esgoto.mp3   "O cara pula em esgoto, sai, mergulha e não acontece nada."
-  bolso-messias.mp3   "Eu sou Messias, mas não faço milagre."
   bolso-virus-sou-eu.mp3   "Pra mídia, o vírus sou eu."   [MDB]
   bolso-ousado.mp3   "Eu não sou médico, mas sou ousado."   [MDB]
-  bolso-vitoria-lula.mp3   "Vai dar vitória pro Lula, sem problema nenhum."   [MDB]
+  bolso-nao-errei.mp3   "Eu não errei nenhuma."   [MDB]
   bolso-lamentamos.mp3   "O problema tá aí, lamentamos."   [MDB]
+  bolso-lamento.mp3   "Lamento, quer que eu faça o quê?"   [MDB]
 
 == Salles ==
   salles-boiada.mp3   "E ir passando a boiada."   [MDB]
+  salles-xo.mp3   "Xô! Xô!" (Milton Cunha)   [MDB]
+  salles-boi-dormir.mp3   "Conversa pra boi dormir." (Nikolas Ferreira)   [MDB]
+  salles-cilada.mp3   "Cilada!" (Molejo)   [MDB]
 
 == Fake news ==
-  fakenews-valido.mp3   "Eu acho que até um fake news é válido, com todo o respeito."   [MDB]
+  fakenews-valido.mp3   "Eu acho que até um fake news é válido, com todo o respeito." (Jair Bolsonaro)   [MDB]
+  fakenews-falsiane.mp3   "Falsiane!" (Laila Brandão)   [MDB]
+  fakenews-tudo-mentira.mp3   "É mentira, é tudo mentira!" (Quércia)   [MDB]
+  fakenews-fabrication.mp3   "It's a total fabrication." (Jonathan Frakes)   [MDB]
 
 == Flávio ==
   flavio-faz-sentido.mp3   "Faz algum sentido pra você isso?"   [MDB]
   flavio-tios-zap.mp3   "Os tios e as tias do zap."   [MDB]
   flavio-audio-calma.mp3   "Irmão, preferi te mandar o áudio aqui pra você ouvir com calma."   [MDB]
+  flavio-audio-longo.mp3   "Desculpa o áudio longo aí, tá?"   [MDB]
 
 == Damares ==
   damares-1.mp3   (só áudio)

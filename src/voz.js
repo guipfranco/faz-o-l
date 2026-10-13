@@ -39,7 +39,8 @@
       estado.ultimaFala = agora();
       estado.historico.push(item);
       const frase = item.frase;
-      aoBalao({ personagem: item.personagem, nome: nomes[item.personagem] || item.personagem, texto: frase && frase.texto ? frase.texto : '' });
+      const nome = (frase && frase.quem) || nomes[item.personagem] || item.personagem;
+      aoBalao({ personagem: item.personagem, nome, texto: frase && frase.texto ? frase.texto : '' });
       if (estado.mudo || !frase || !criarAudio) return;
       // Só toca gravação real; sem o mp3 fica apenas o balão.
       const silencio = () => {};
@@ -65,8 +66,10 @@
 
     const api = { estado };
     api.falar = function (ped) {
-      const frase = escolherFrase(ped.personagem, ped.gatilho);
-      const item = { personagem: ped.personagem, gatilho: ped.gatilho || 'match', frase };
+      let frase = escolherFrase(ped.personagem, ped.gatilho);
+      // Personagem sem frase própria (ex.: peça da Marina) cede a vez à torcida.
+      if (!frase && ped.personagem !== 'torcida') frase = escolherFrase('torcida', ped.gatilho);
+      const item = { personagem: frase ? frase.personagem : ped.personagem, gatilho: ped.gatilho || 'match', frase };
       const t = agora();
       if (t - estado.ultimaFala >= intervalo && !estado.pendente) { executar(item); return; }
       estado.pendente = item;
