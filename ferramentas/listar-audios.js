@@ -5,18 +5,18 @@ const path = require('node:path');
 const frases = require('../dados/frases');
 
 const linhas = [
-  'AUDIOS DO FAZ O L',
+  'ÁUDIOS DO FAZ O L',
   '',
   'Coloque nesta pasta arquivos .mp3 com os nomes abaixo. Quando o arquivo existe, o jogo toca o clipe;',
-  'quando nao existe, o Chrome le o texto com voz sintetizada; frases marcadas como "so audio" ficam mudas sem arquivo.',
-  'Nenhum audio e distribuido com o jogo. A responsabilidade pelo conteudo dos clipes e de quem os adiciona.',
+  'quando não existe, o Chrome lê o texto com voz sintetizada; frases marcadas como "só áudio" ficam mudas sem arquivo.',
+  'Nenhum áudio é distribuído com o jogo. A responsabilidade pelo conteúdo dos clipes é de quem os adiciona.',
   '',
 ];
 const porPersonagem = {};
 for (const f of frases.lista) (porPersonagem[f.personagem] = porPersonagem[f.personagem] || []).push(f);
 for (const [p, lista] of Object.entries(porPersonagem)) {
   linhas.push('== ' + (frases.NOMES[p] || p) + ' ==');
-  for (const f of lista) linhas.push('  ' + f.id + '.mp3' + (f.somenteAudio ? '   (so audio)' : '   "' + f.texto + '"'));
+  for (const f of lista) linhas.push('  ' + f.id + '.mp3' + (f.somenteAudio ? '   (só áudio)' : '   "' + f.texto + '"'));
   linhas.push('');
 }
 const destino = path.join(__dirname, '..', 'audios', 'LEIA-ME.txt');

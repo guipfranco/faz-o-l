@@ -1,8 +1,8 @@
-AUDIOS DO FAZ O L
+ÁUDIOS DO FAZ O L
 
 Coloque nesta pasta arquivos .mp3 com os nomes abaixo. Quando o arquivo existe, o jogo toca o clipe;
-quando nao existe, o Chrome le o texto com voz sintetizada; frases marcadas como "so audio" ficam mudas sem arquivo.
-Nenhum audio e distribuido com o jogo. A responsabilidade pelo conteudo dos clipes e de quem os adiciona.
+quando não existe, o Chrome lê o texto com voz sintetizada; frases marcadas como "só áudio" ficam mudas sem arquivo.
+Nenhum áudio é distribuído com o jogo. A responsabilidade pelo conteúdo dos clipes é de quem os adiciona.
 
 == Lula ==
   lula-nunca-antes.mp3   "Nunca antes na história deste país!"
@@ -16,7 +16,7 @@ Nenhum audio e distribuido com o jogo. A responsabilidade pelo conteudo dos clip
   alckmin-dr-geraldo.mp3   "Dr. Geraldo responde."
 
 == Marina ==
-  marina-boiadas.mp3   "Boiadas se passaram onde só deveriam passar políticas de proteção ambiental."
+  marina-boiadas.mp3   "Boiadas se passaram no lugar onde apenas deveriam se passar políticas de proteção ambiental."
   marina-apatia.mp3   "A maior ameaça ambiental no Brasil é a apatia."
 
 == Boulos ==
@@ -25,7 +25,7 @@ Nenhum audio e distribuido com o jogo. A responsabilidade pelo conteudo dos clip
 
 == Dilma ==
   dilma-dobrar-meta.mp3   "Vamos dobrar a meta!"
-  dilma-estocar-vento.mp3   "Não dá para estocar vento."
+  dilma-estocar-vento.mp3   "Estocar vento."
 
 == Bolsonaro ==
   bolso-coveiro.mp3   "Eu não sou coveiro, tá?"
@@ -38,14 +38,14 @@ Nenhum audio e distribuido com o jogo. A responsabilidade pelo conteudo dos clip
   salles-boiada.mp3   "Passar a boiada!"
 
 == Damares ==
-  damares-1.mp3   (so audio)
+  damares-1.mp3   (só áudio)
 
 == Pazuello ==
-  pazuello-1.mp3   (so audio)
+  pazuello-1.mp3   (só áudio)
 
 == Fake news ==
-  fakenews-1.mp3   (so audio)
+  fakenews-1.mp3   (só áudio)
 
 == Flávio ==
-  flavio-1.mp3   (so audio)
-  flavio-2.mp3   (so audio)
+  flavio-1.mp3   (só áudio)
+  flavio-2.mp3   (só áudio)

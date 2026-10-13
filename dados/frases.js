@@ -28,7 +28,7 @@
       contexto: 'Série de memes do perfil oficial sobre a Nova Indústria Brasil, janeiro de 2024', fonte: 'https://oantagonista.com.br/?p=1042782' },
 
     // Marina
-    { id: 'marina-boiadas', personagem: 'marina', texto: 'Boiadas se passaram onde só deveriam passar políticas de proteção ambiental.', gatilhos: ['match'],
+    { id: 'marina-boiadas', personagem: 'marina', texto: 'Boiadas se passaram no lugar onde apenas deveriam se passar políticas de proteção ambiental.', gatilhos: ['match'],
       contexto: 'Discurso de posse no Ministério do Meio Ambiente, 2023', fonte: 'https://www.moneytimes.com.br/em-posse-concorrida-marina-silva-fala-em-fim-da-barbarie-veja-discurso-na-integra-de-nova-ministra/' },
     { id: 'marina-apatia', personagem: 'marina', texto: 'A maior ameaça ambiental no Brasil é a apatia.', gatilhos: ['match'], revisar: true,
       contexto: 'Atribuída em lista de frases ambientais; confirmar redação literal', fonte: 'https://www.oeco.org.br/wp-content/uploads/wp-post-to-pdf-enhanced-cache/1/21-frases-de-meio-ambiente-por-politicos.pdf' },
@@ -42,7 +42,7 @@
     // Dilma
     { id: 'dilma-dobrar-meta', personagem: 'dilma', texto: 'Vamos dobrar a meta!', gatilhos: ['match'],
       contexto: 'Anúncio do Pronatec, julho de 2015', fonte: 'https://www.tnh1.com.br/noticia/nid/em-ato-dos-cem-dias-damares-parodia-dilma-e-diz-que-vai-dobrar-meta/' },
-    { id: 'dilma-estocar-vento', personagem: 'dilma', texto: 'Não dá para estocar vento.', gatilhos: ['match'],
+    { id: 'dilma-estocar-vento', personagem: 'dilma', texto: 'Estocar vento.', gatilhos: ['match'],
       contexto: 'Discurso sobre energia eólica', fonte: 'https://jus.com.br/artigos/43635/dilma-rousseff-e-o-vento-muito-alem-de-dilma' },
 
     // Bolsonaro (obstáculo)
