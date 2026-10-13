@@ -1,0 +1,51 @@
+ÁUDIOS DO FAZ O L
+
+Coloque nesta pasta arquivos .mp3 com os nomes abaixo. Quando o arquivo existe, o jogo toca o clipe;
+quando não existe, o Chrome lê o texto com voz sintetizada; frases marcadas como "só áudio" ficam mudas sem arquivo.
+Nenhum áudio é distribuído com o jogo. A responsabilidade pelo conteúdo dos clipes é de quem os adiciona.
+
+== Lula ==
+  lula-nunca-antes.mp3   "Nunca antes na história deste país!"
+  lula-sou-uma-ideia.mp3   "Eu não sou mais um ser humano, eu sou uma ideia."
+  lula-brasil-de-volta.mp3   "O Brasil está de volta!"
+  lula-picanha.mp3   "O povo vai voltar a comer picanha e tomar uma cervejinha."
+  lula-faz-o-l.mp3   "Faz o L!"
+
+== Alckmin ==
+  alckmin-gag.mp3   "Gag de la gag!"
+  alckmin-dr-geraldo.mp3   "Dr. Geraldo responde."
+
+== Marina ==
+  marina-boiadas.mp3   "Boiadas se passaram no lugar onde apenas deveriam se passar políticas de proteção ambiental."
+  marina-apatia.mp3   "A maior ameaça ambiental no Brasil é a apatia."
+
+== Boulos ==
+  boulos-vai-vencer.mp3   "Não foi nessa eleição, mas a gente vai ganhar!"
+  boulos-nao-por-eleicao.mp3   "Nós não estamos na política por causa de eleição."
+
+== Dilma ==
+  dilma-dobrar-meta.mp3   "Vamos dobrar a meta!"
+  dilma-estocar-vento.mp3   "Estocar vento."
+
+== Bolsonaro ==
+  bolso-coveiro.mp3   "Eu não sou coveiro, tá?"
+  bolso-e-dai.mp3   "E daí? Lamento."
+  bolso-gripezinha.mp3   "Uma gripezinha."
+  bolso-esgoto.mp3   "O cara pula em esgoto, sai, mergulha e não acontece nada."
+  bolso-messias.mp3   "Eu sou Messias, mas não faço milagre."
+
+== Salles ==
+  salles-boiada.mp3   "Passar a boiada!"
+
+== Damares ==
+  damares-1.mp3   (só áudio)
+
+== Pazuello ==
+  pazuello-1.mp3   (só áudio)
+
+== Fake news ==
+  fakenews-1.mp3   (só áudio)
+
+== Flávio ==
+  flavio-1.mp3   (só áudio)
+  flavio-2.mp3   (só áudio)

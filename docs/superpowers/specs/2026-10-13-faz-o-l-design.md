@@ -290,3 +290,14 @@ faz-o-l/
 | Mapa SVG pesado | Simplificar geometria (tolerância de cerca de 0,01°); meta abaixo de 200 KB |
 | Caricaturas parecidas em tela pequena | Cor e silhueta distintas por personagem; teste a 40 px |
 | Repertório pequeno fica repetitivo | Rotação sem repetição; falas completas só em 4+, especial ou cascata |
+
+## 10. Desvios aceitos
+
+Decisões tomadas durante a implementação que diferem do texto acima:
+
+- As fases geradas são guiadas por constantes em `src/logica/geradorFases.js` (desbloqueio, máximos por obstáculo, curva de dificuldade), e não por modelos em `dados/fases.js`; esse arquivo guarda só as fases manuais.
+- O mapa cinza não tem textura de rachaduras, e os estados concluídos não têm brilho.
+- A gelatina (Damares) e a corrente (Pazuello) não falam; só os blocos falam quando atingidos.
+- O bônus final de vitória vale 10% dos pontos que as jogadas restantes gerariam.
+- Estrelas: vale a melhor nota entre os pontos (limiares) e as jogadas que sobraram antes do bônus (metade ou mais dá 3, um quarto dá 2), com +1 por 3 L e teto de 4.
+- Fase sem jogada possível: embaralha; se o embaralhamento falha, a fase termina em derrota.

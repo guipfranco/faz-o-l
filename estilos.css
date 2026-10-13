@@ -1,0 +1,68 @@
+:root {
+  --vermelho: #c8102e; --verde: #009c3b; --amarelo: #ffdf00; --azul: #002776;
+  --fundo: #14141c; --painel: #1f1f2b; --texto: #f4f4f4; --cinza: #5a5a66;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; height: 100%; background: var(--fundo); color: var(--texto);
+  font-family: "Segoe UI", system-ui, sans-serif; overflow: hidden; }
+.tela { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; }
+#menu { justify-content: center; gap: 16px; text-align: center; padding: 24px; }
+#menu h1 { font-size: 64px; margin: 0; letter-spacing: -2px; }
+#menu h1 .l { color: var(--vermelho); display: inline-block; transform: rotate(-8deg); }
+.rodape { color: var(--cinza); font-size: 12px; max-width: 420px; }
+.botao { border: 0; border-radius: 999px; padding: 12px 28px; font-size: 18px; font-weight: 700;
+  background: var(--vermelho); color: #fff; cursor: pointer; }
+.botao:hover { filter: brightness(1.1); }
+.botao.grande { font-size: 26px; padding: 16px 48px; }
+.botao.secundario { background: var(--painel); color: var(--texto); }
+.botao.pequeno { font-size: 14px; padding: 6px 14px; }
+.botao.verde { background: var(--verde); }
+.botao:disabled { background: var(--cinza); cursor: default; }
+
+/* mapa */
+#mapa { padding: 0; }
+.barra { width: 100%; display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 16px; background: var(--painel); font-weight: 700; }
+#mapa-svg { flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; padding: 8px; min-height: 0; }
+#mapa-svg svg { max-height: 100%; max-width: 100%; height: auto; }
+@media (max-width: 600px) { #mapa-svg { align-items: flex-start; } }
+.estado { stroke: #0b0b10; stroke-width: 0.8; cursor: default; transition: fill .6s; }
+.estado.nivel-0 { fill: #3b3b45; }
+.estado.nivel-1 { fill: #8a7a5a; }
+.estado.nivel-2 { fill: #5f9a4f; }
+.estado.nivel-3 { fill: url(#gradBR); }
+.estado.atual { cursor: pointer; stroke: var(--amarelo); stroke-width: 2.2; animation: pulsar 1.4s infinite; }
+.estado.bloqueado { opacity: .75; }
+@keyframes pulsar { 0%, 100% { stroke-opacity: 1; } 50% { stroke-opacity: .25; } }
+.icone-obra { font-size: 9px; pointer-events: none; text-anchor: middle; }
+.sigla { font-size: 7px; fill: #fff; opacity: .85; pointer-events: none; text-anchor: middle; font-weight: 700; }
+
+#painel-estado { position: absolute; left: 12px; bottom: 12px; width: min(340px, calc(100% - 24px));
+  background: var(--painel); border-radius: 16px; padding: 14px; box-shadow: 0 8px 30px #0008; }
+#painel-estado h2 { margin: 0 0 8px; font-size: 20px; }
+#painel-estado .obras, #painel-estado .fases { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+.chip { background: #2b2b3a; border-radius: 10px; padding: 6px 10px; font-size: 13px; display: flex; gap: 6px; align-items: center; }
+.chip.feita { background: var(--verde); }
+.fase-btn { border-radius: 10px; border: 0; padding: 8px 10px; background: #2b2b3a; color: var(--texto); cursor: pointer; min-width: 64px; }
+.fase-btn.liberada { background: var(--vermelho); }
+.fase-btn:disabled { opacity: .4; cursor: default; }
+.fase-btn small { display: block; font-size: 11px; }
+
+/* jogo */
+#jogo { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--fundo); }
+#jogo canvas { max-width: 100%; max-height: 100%; }
+
+/* balão */
+#balao { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%);
+  background: #fff; color: #111; border-radius: 18px; padding: 10px 16px; max-width: min(520px, 90%);
+  box-shadow: 0 6px 24px #0009; font-size: 16px; z-index: 20; animation: surgir .25s ease-out; }
+#balao::after { content: ""; position: absolute; left: 50%; bottom: -10px; border: 10px solid transparent;
+  border-top-color: #fff; border-bottom: 0; transform: translateX(-50%); }
+#balao strong { color: var(--vermelho); margin-right: 8px; }
+@keyframes surgir { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* confete */
+#confete { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 30; }
+.papel { position: absolute; top: -12px; width: 10px; height: 16px; animation: cair 2.4s linear forwards; }
+@keyframes cair { to { transform: translateY(110vh) rotate(720deg); opacity: .2; } }

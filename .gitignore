@@ -1,0 +1,5 @@
+ferramentas/fontes/
+node_modules/
+*.log
+.superpowers/
+.playwright-mcp/
