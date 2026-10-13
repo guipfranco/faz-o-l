@@ -7,13 +7,14 @@
     const nomes = opts.nomes || {};
     const criarAudio = opts.criarAudio || null;
     const aoBalao = opts.aoBalao || function () {};
+    const aoFimDaFala = opts.aoFimDaFala || function () {};
     const agora = opts.agora || (() => Date.now());
     const agendar = opts.agendar || ((fn, ms) => setTimeout(fn, ms));
     const aleatorio = opts.aleatorio || Math.random;
     const intervalo = opts.intervaloMs || 4000;
     const pasta = opts.pastaAudios || 'audios/';
 
-    const estado = { mudo: false, volume: 0.8, ultimaFala: -Infinity, pendente: null, timerAtivo: false, rotacao: {}, historico: [] };
+    const estado = { mudo: false, volume: 0.8, ultimaFala: -Infinity, pendente: null, timerAtivo: false, rotacao: {}, historico: [], audioAtual: null };
 
     function embaralhar(lista) {
       const a = lista.slice();
@@ -35,23 +36,36 @@
       return cand.find((f) => f.id === id) || cand[0];
     }
 
+    // Um clipe por vez: a fala nova (ou o mudo) interrompe a que estiver tocando.
+    function parar() {
+      const a = estado.audioAtual;
+      if (!a) return;
+      estado.audioAtual = null;
+      try { a.pause(); } catch (e) { /* ignora */ }
+      aoFimDaFala();
+    }
+
     function executar(item) {
       estado.ultimaFala = agora();
       estado.historico.push(item);
+      parar();
       const frase = item.frase;
       const nome = (frase && frase.quem) || nomes[item.personagem] || item.personagem;
-      aoBalao({ personagem: item.personagem, nome, texto: frase && frase.texto ? frase.texto : '' });
-      if (estado.mudo || !frase || !criarAudio) return;
+      const tocar = !estado.mudo && !!frase && !!criarAudio;
+      aoBalao({ personagem: item.personagem, nome, texto: frase && frase.texto ? frase.texto : '', comAudio: tocar });
+      if (!tocar) return;
       // Só toca gravação real; sem o mp3 fica apenas o balão.
-      const silencio = () => {};
       let audio;
-      try { audio = criarAudio(pasta + frase.id + '.mp3'); } catch (e) { return; }
+      try { audio = criarAudio(pasta + frase.id + '.mp3'); } catch (e) { aoFimDaFala(); return; }
+      estado.audioAtual = audio;
+      const terminar = () => { if (estado.audioAtual !== audio) return; estado.audioAtual = null; aoFimDaFala(); };
       try { audio.volume = estado.volume; } catch (e) { /* ignora */ }
-      audio.onerror = silencio;
+      audio.onended = terminar;
+      audio.onerror = terminar;
       try {
         const p = audio.play();
-        if (p && typeof p.catch === 'function') p.catch(silencio);
-      } catch (e) { /* sem áudio: segue em silêncio */ }
+        if (p && typeof p.catch === 'function') p.catch(terminar);
+      } catch (e) { terminar(); }
     }
 
     function processar() {
@@ -75,8 +89,17 @@
       estado.pendente = item;
       if (!estado.timerAtivo) { estado.timerAtivo = true; agendar(processar, Math.max(0, estado.ultimaFala + intervalo - t)); }
     };
-    api.mudo = function (v) { if (v !== undefined) estado.mudo = !!v; return estado.mudo; };
-    api.volume = function (v) { if (v !== undefined) estado.volume = Math.max(0, Math.min(1, v)); return estado.volume; };
+    api.mudo = function (v) {
+      if (v !== undefined) { estado.mudo = !!v; if (estado.mudo) parar(); }
+      return estado.mudo;
+    };
+    api.volume = function (v) {
+      if (v !== undefined) {
+        estado.volume = Math.max(0, Math.min(1, v));
+        if (estado.audioAtual) try { estado.audioAtual.volume = estado.volume; } catch (e) { /* ignora */ }
+      }
+      return estado.volume;
+    };
     api.nomeDe = (p) => nomes[p] || p;
     return api;
   };

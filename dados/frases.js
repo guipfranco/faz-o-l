@@ -16,11 +16,12 @@
   // Edite à vontade. Regras: toda frase com texto tem fonte (URL) e um clipe real (medoDelirio); o jogo não usa voz sintetizada.
   // medoDelirio: id do clipe no acervo do app Medo e Delírio em Brasília; `node ferramentas/puxar-audios.js` baixa para audios/<id>.mp3.
   // quem: quem fala de verdade no clipe, mostrado no balão (sem ele, aparece o nome do personagem).
-  const MDB = 'https://github.com/rafaelclaycon/MedoDelirioBrasilia';
+  // fonte padrão: o registro do clipe no acervo do app (título, autor, data), não só o repositório.
   const CLIPE = 'Clipe do app Medo e Delírio em Brasília';
+  const fonteDoClipe = (id) => 'https://api.medodelirioios.com/api/v3/sound/' + id;
   const PODER360 = 'https://www.poder360.com.br/coronavirus/2-anos-de-covid-relembre-30-frases-de-bolsonaro-sobre-pandemia/';
   function clipe(id, personagem, gatilhos, texto, medoDelirio, quem) {
-    const f = { id, personagem, texto, gatilhos, contexto: CLIPE, fonte: MDB, medoDelirio };
+    const f = { id, personagem, texto, gatilhos, contexto: CLIPE, fonte: fonteDoClipe(medoDelirio), medoDelirio };
     if (quem) f.quem = quem;
     return f;
   }
@@ -76,7 +77,7 @@
     clipe('torcida-que-fase', 'torcida', ['cascata'], 'Que fase!', 'E029ED09-CAE3-43B2-A478-422061A08B5A', 'Milton Leite'),
 
     // Vitória na fase e estado concluído
-    clipe('lula-esperanca', 'torcida', ['vitoria', 'estado'], 'A esperança finalmente venceu o medo.', '06BB6AC8-F3BF-4995-A7B1-0ECD5013D146', 'Lula'),
+    clipe('torcida-esperanca', 'torcida', ['vitoria', 'estado'], 'A esperança finalmente venceu o medo.', '06BB6AC8-F3BF-4995-A7B1-0ECD5013D146', 'Lula'),
     clipe('torcida-brasil', 'torcida', ['vitoria'], 'Brasil!', 'B62CDB8A-F6DD-476D-85E0-245327D1B47E', 'Gil do Vigor'),
     clipe('torcida-milicia', 'torcida', ['vitoria'], 'Vencemos a milícia sem dar um tiro.', 'A2B474FD-4704-472F-8D1F-AB6D5E834778', 'Gregório Duvivier'),
     clipe('torcida-missao-cumprida', 'torcida', ['estado'], 'Missão cumprida.', 'AF6C9C84-24ED-4DAB-ADB1-9577B3304B47', 'Eduardo Pazuello'),

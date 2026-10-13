@@ -61,6 +61,28 @@ test('personagem sem frase cede a vez a torcida, e o balao mostra quem falou de 
   assert.equal(baloes[0].texto, 'X');
 });
 
+test('um clipe por vez: fala nova e mudo interrompem; volume vale para o clipe tocando', () => {
+  const audios = [], fins = [];
+  let t = 0;
+  const api = voz.criar({
+    frases: [{ id: 'a', personagem: 'lula', texto: 'A' }, { id: 'b', personagem: 'lula', texto: 'B' }],
+    criarAudio: (url) => { const a = { url, volume: 1, pausado: false, pause() { this.pausado = true; }, play() { return Promise.resolve(); } }; audios.push(a); return a; },
+    aoFimDaFala: () => fins.push(t), agora: () => t, agendar: () => {},
+  });
+  api.falar({ personagem: 'lula' });
+  api.volume(0.3);
+  assert.equal(audios[0].volume, 0.3);
+  t = 5000;
+  api.falar({ personagem: 'lula' });
+  assert.equal(audios[0].pausado, true, 'a fala nova interrompe a anterior');
+  assert.equal(audios[1].pausado, false);
+  api.mudo(true);
+  assert.equal(audios[1].pausado, true, 'o mudo interrompe o clipe');
+  assert.equal(fins.length, 2);
+  audios[0].onended();
+  assert.equal(fins.length, 2, 'fim de clipe ja interrompido nao conta de novo');
+});
+
 test('somenteAudio sem arquivo: so balao com o nome', async () => {
   const env = ambiente();
   env.api.falar({ personagem: 'flavio' });

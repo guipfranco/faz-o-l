@@ -13,17 +13,21 @@
 
   const progresso = F.progresso.criar({ armazenamento: tentarLocalStorage(), estados });
 
-  let timerBalao = null;
+  // O balão fica pelo menos 3,5 s e não some enquanto o clipe ainda toca.
+  let timerBalao = null, balaoVencido = false, falando = false;
+  function esconderBalaoSeLivre() { if (balaoVencido && !falando) el('balao').hidden = true; }
   function mostrarBalao(b) {
-    const balao = el('balao');
     el('balao-nome').textContent = b.nome;
     el('balao-texto').textContent = b.texto;
-    balao.hidden = false;
+    el('balao').hidden = false;
+    balaoVencido = false;
+    falando = !!b.comAudio;
     clearTimeout(timerBalao);
-    timerBalao = setTimeout(() => { balao.hidden = true; }, 3500);
+    timerBalao = setTimeout(() => { balaoVencido = true; esconderBalaoSeLivre(); }, 3500);
   }
+  function aoFimDaFala() { falando = false; esconderBalaoSeLivre(); }
 
-  const voz = F.voz.criar({ frases: frases.lista, nomes: frases.NOMES, criarAudio: (url) => new Audio(url), aoBalao: mostrarBalao });
+  const voz = F.voz.criar({ frases: frases.lista, nomes: frases.NOMES, criarAudio: (url) => new Audio(url), aoBalao: mostrarBalao, aoFimDaFala });
   voz.mudo(progresso.audio().mudo);
   voz.volume(progresso.audio().volume);
 

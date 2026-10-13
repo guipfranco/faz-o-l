@@ -43,7 +43,7 @@ e são baixados com: node ferramentas/puxar-audios.js
   torcida-sonhar.mp3   "Eles tão deixando a gente sonhar." (Ronaldinho Gaúcho)   [MDB]
   torcida-rimou.mp3   "Rimou!" (Rafa Chalub)   [MDB]
   torcida-que-fase.mp3   "Que fase!" (Milton Leite)   [MDB]
-  lula-esperanca.mp3   "A esperança finalmente venceu o medo." (Lula)   [MDB]
+  torcida-esperanca.mp3   "A esperança finalmente venceu o medo." (Lula)   [MDB]
   torcida-brasil.mp3   "Brasil!" (Gil do Vigor)   [MDB]
   torcida-milicia.mp3   "Vencemos a milícia sem dar um tiro." (Gregório Duvivier)   [MDB]
   torcida-missao-cumprida.mp3   "Missão cumprida." (Eduardo Pazuello)   [MDB]

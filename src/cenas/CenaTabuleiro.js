@@ -269,7 +269,6 @@
           case 'match': {
             if (ev.especial) falaPendente = torcida(GATILHO_DO_ESPECIAL[ev.especial] || 'match');
             else if (ev.cascata >= 3) falaPendente = torcida('cascata');
-            else if (ev.tamanho >= 4) falaPendente = { personagem: ev.peca, gatilho: 'match' };
             else {
               // Match simples de 3: só um "plim" e o nome da peça, sem balão.
               const app = raiz.FazOL.ui.app;
