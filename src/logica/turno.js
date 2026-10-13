@@ -62,13 +62,14 @@
     return 0;
   }
 
-  function aplicarLimpeza(estado, mapa, eventos, cascata) {
-    let pontosRodada = 0, destruiuBoiada = false;
-    const limpas = [], obst = [];
+  function aplicarLimpeza(estado, mapa, eventos, cascata, extras) {
+    let pontosRodada = 0, destruiuBoiada = false, chefeAtingido = false;
+    const limpas = [], obst = (extras || []).slice();
     for (const x of mapa.values()) {
       const cel = celulaEm(estado, x);
       if (!cel) continue;
       if (cel.bloco) {
+        if (cel.bloco.tipo === 'chefe') { if (chefeAtingido) continue; chefeAtingido = true; }
         const r = obstaculos.golpe(estado, x.l, x.c, 1);
         if (r) { pontosRodada += registrarGolpe(estado, obst, r, x.l, x.c); if (r.destruido && r.tipo === 'boiada') destruiuBoiada = true; }
         continue;
@@ -90,9 +91,8 @@
         if (mapa.has(kv) || atingidos.has(kv)) continue;
         const cv = celulaEm(estado, v);
         if (!cv || (!cv.bloco && !cv.corrente)) continue;
-        const chaveChefe = cv.bloco && cv.bloco.tipo === 'chefe' ? 'chefe' : kv;
-        if (atingidos.has(chaveChefe)) continue;
-        atingidos.add(kv); atingidos.add(chaveChefe);
+        if (cv.bloco && cv.bloco.tipo === 'chefe') { if (chefeAtingido) continue; chefeAtingido = true; }
+        atingidos.add(kv);
         const r = obstaculos.golpeAdjacente(estado, v.l, v.c);
         if (r) { pontosRodada += registrarGolpe(estado, obst, r, v.l, v.c); if (r.destruido && r.tipo === 'boiada') destruiuBoiada = true; }
       }
@@ -122,14 +122,21 @@
           const temMovida = movida && cascata === 1 && grupo.celulas.some((x) => x.l === movida.l && x.c === movida.c);
           pos = temMovida ? { l: movida.l, c: movida.c } : { l: grupo.canto.l, c: grupo.canto.c };
           criar.push({ l: pos.l, c: pos.c, especial: esp, peca: grupo.peca });
+          const celPos = celulaEm(estado, pos);
+          if (celPos && celPos.especial) adicionar(mapa, pos, 1, 'match');
         }
         eventos.push({ tipo: 'match', peca: grupo.peca, forma: grupo.forma, tamanho: grupo.celulas.length, celulas: grupo.celulas, cascata, especial: esp, l: pos ? pos.l : undefined, c: pos ? pos.c : undefined });
         for (const cel of grupo.celulas) if (!pos || cel.l !== pos.l || cel.c !== pos.c) adicionar(mapa, cel, 1, 'match');
       }
       if (areaInicial) { for (const cel of areaInicial.celulas) adicionar(mapa, cel, areaInicial.fator, 'especial'); areaInicial = null; }
       ativarEmCadeia(estado, mapa, eventos);
-      for (const item of criar) mapa.delete(matches.chave(item));
-      const r = aplicarLimpeza(estado, mapa, eventos, cascata);
+      const extras = [];
+      for (const item of criar) {
+        mapa.delete(matches.chave(item));
+        const cg = celulaEm(estado, item);
+        if (cg && cg.gelatina > 0) { cg.gelatina -= 1; extras.push({ tipo: 'gelatina', l: item.l, c: item.c, destruido: cg.gelatina === 0, vida: cg.gelatina }); }
+      }
+      const r = aplicarLimpeza(estado, mapa, eventos, cascata, extras);
       destruiuBoiada = destruiuBoiada || r.destruiuBoiada;
       for (const item of criar) {
         const cel = celulaEm(estado, item);

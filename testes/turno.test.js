@@ -172,3 +172,31 @@ test('coletar conta pecas limpas da cor', () => {
   turno.jogar(e, { l: 2, c: 0 }, { l: 3, c: 0 });
   assert.ok(e.objetivos[0].atual >= 3);
 });
+
+test('chefe leva um unico golpe por rodada mesmo com especial cobrindo duas celulas dele', () => {
+  const e = estadoCom(['LAMBD', 'AMBDA', 'DLALB', 'BDLMB', 'MABDA'], { obstaculos: [{ tipo: 'chefe', l: 3, c: 3, vida: 10 }] });
+  e.celulas[2][3].especial = 'bomba';
+  const r = turno.jogar(e, { l: 3, c: 2 }, { l: 2, c: 2 });
+  const golpes = r.eventos.filter((x) => x.tipo === 'limpar').flatMap((x) => x.obstaculos).filter((o) => o.tipo === 'chefe');
+  assert.equal(golpes.length, 1);
+  assert.equal(e.chefe.vida, 9);
+});
+
+test('especial na celula de nascimento ativa antes de ser substituida', () => {
+  const e = estadoCom(['LAMBD', 'AMBDA', 'MLLDL', 'BDALB']);
+  e.celulas[3][3].especial = 'listradaH';
+  const r = turno.jogar(e, { l: 3, c: 3 }, { l: 2, c: 3 });
+  const ativ = r.eventos.find((x) => x.tipo === 'especialAtivado');
+  assert.ok(ativ && ativ.especial === 'listradaH' && ativ.l === 2 && ativ.c === 3);
+  const criado = r.eventos.find((x) => x.tipo === 'especialCriado');
+  assert.equal(criado.especial, 'listradaV');
+  assert.equal(e.celulas[2][3].especial, 'listradaV');
+});
+
+test('gelatina embaixo da celula de nascimento da especial tambem some', () => {
+  const e = estadoCom(['LAMBD', 'AMBDA', 'MLLDL', 'BDALB'], { obstaculos: [{ tipo: 'gelatina', l: 2, c: 3 }] });
+  const r = turno.jogar(e, { l: 3, c: 3 }, { l: 2, c: 3 });
+  assert.equal(e.celulas[2][3].gelatina, 0);
+  const limpar = r.eventos.find((x) => x.tipo === 'limpar');
+  assert.ok(limpar.obstaculos.some((o) => o.tipo === 'gelatina' && o.l === 2 && o.c === 3 && o.destruido));
+});
