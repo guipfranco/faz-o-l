@@ -71,3 +71,20 @@ test('dados corrompidos voltam ao padrao', () => {
   const p = progresso.criar({ armazenamento: arm, estados });
   assert.equal(p.estadoAtual(), 'PE');
 });
+
+test('armazenamento que so falha ao gravar: persistente false ja no carregamento', () => {
+  const soLeitura = { getItem: () => null, setItem: () => { throw new Error('quota'); } };
+  const p = progresso.criar({ armazenamento: soLeitura, estados });
+  assert.equal(p.persistente, false);
+  p.registrarFase(1, 1, 1);
+  assert.equal(p.estrelasDaFase(1), 1, 'segue em memoria');
+});
+
+test('dados corrompidos com armazenamento funcional: volta ao padrao e persistente true', () => {
+  const arm = memoria();
+  arm.setItem(progresso.CHAVE, '{nao e json');
+  const p = progresso.criar({ armazenamento: arm, estados });
+  assert.equal(p.estadoAtual(), 'PE');
+  assert.equal(p.persistente, true);
+  assert.ok(JSON.parse(arm.getItem(progresso.CHAVE)).fases, 'sondagem regravou o padrao');
+});

@@ -69,6 +69,7 @@
     api.definirAudio = function (cfg) { Object.assign(dados.audio, cfg); salvar(); };
     api.apagar = function () { dados = padrao(); salvar(); };
 
+    salvar();
     return api;
   };
 
