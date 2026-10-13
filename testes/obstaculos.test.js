@@ -72,6 +72,15 @@ test('espalharBoiada respeita a mascara e devolve null sem opcoes', () => {
   assert.equal(obstaculos.espalharBoiada(e, false), null);
 });
 
+test('espalharBoiada ignora vizinho fora da mascara', () => {
+  // boiada em (1,1); (1,2) e (0,1) fora da mascara; (1,0) corrente; so (2,1) esta livre
+  const e = estadoCom(['L#L', 'LB#', 'LLL']);
+  obstaculos.colocar(e, [{ tipo: 'boiada', l: 1, c: 1 }, { tipo: 'corrente', l: 1, c: 0 }]);
+  assert.deepEqual(obstaculos.espalharBoiada(e, false), { l: 2, c: 1 });
+  e.celulas[2][1].bloco = null; e.celulas[2][1].peca = 'lula'; e.celulas[2][1].corrente = true;
+  assert.equal(obstaculos.espalharBoiada(e, false), null, 'sem vizinho livre: nem a mascara nem a corrente servem');
+});
+
 test('fake news multiplica a cada duas chamadas', () => {
   const e = estadoCom(['LAM', 'ABL', 'MLA']);
   obstaculos.colocar(e, [{ tipo: 'fakenews', l: 1, c: 1 }]);
