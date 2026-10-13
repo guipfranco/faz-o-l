@@ -200,3 +200,10 @@ test('gelatina embaixo da celula de nascimento da especial tambem some', () => {
   const limpar = r.eventos.find((x) => x.tipo === 'limpar');
   assert.ok(limpar.obstaculos.some((o) => o.tipo === 'gelatina' && o.l === 2 && o.c === 3 && o.destruido));
 });
+
+test('bonus final nao deixa grupos no tabuleiro', () => {
+  const e = estadoCom(['LAMB', 'AMBD', 'LBDM', 'ALLA'], { objetivos: [{ tipo: 'pontos', alvo: 100 }], jogadas: 12 });
+  turno.jogar(e, { l: 2, c: 0 }, { l: 3, c: 0 });
+  assert.equal(e.status, 'vitoria');
+  assert.equal(matches.encontrarGrupos(e.celulas).length, 0);
+});

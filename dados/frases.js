@@ -34,8 +34,8 @@
       contexto: 'Atribuída em lista de frases ambientais; confirmar redação literal', fonte: 'https://www.oeco.org.br/wp-content/uploads/wp-post-to-pdf-enhanced-cache/1/21-frases-de-meio-ambiente-por-politicos.pdf' },
 
     // Boulos
-    { id: 'boulos-vai-vencer', personagem: 'boulos', texto: 'Não foi nessa eleição, mas a gente vai vencer!', gatilhos: ['match'],
-      contexto: 'Após o 2º turno em São Paulo, 2020', fonte: 'https://ihu.unisinos.br/categorias/576962-boulos-sobe-a-rampa' },
+    { id: 'boulos-vai-vencer', personagem: 'boulos', texto: 'Não foi nessa eleição, mas a gente vai ganhar!', gatilhos: ['match'],
+      contexto: 'Discurso após o 2º turno em São Paulo, 29/11/2020', fonte: 'https://www.agazeta.com.br/brasil/guilherme-boulos-nao-foi-nessa-eleicao-mas-a-gente-vai-ganhar-1120' },
     { id: 'boulos-nao-por-eleicao', personagem: 'boulos', texto: 'Nós não estamos na política por causa de eleição.', gatilhos: ['match'],
       contexto: 'Campanha de 2024', fonte: 'https://www.bandab.com.br/politica/boulos-repete-lula-com-carta-para-tentar-reduzir-rejeicao-e-decide-dormir-na-casa-de-eleitores/amp/' },
 

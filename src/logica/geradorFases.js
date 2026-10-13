@@ -81,8 +81,8 @@
       if (deObstaculo.length) escolhidos.push(rng.escolher(r, deObstaculo));
       for (const t of rng.embaralhar(r, opcoes)) { if (escolhidos.length >= quantos) break; if (!escolhidos.includes(t)) escolhidos.push(t); }
       for (const tipo of escolhidos) {
-        if (tipo === 'pontos') def.objetivos.push({ tipo, alvo: arred100(2500 + 9000 * d) });
-        else if (tipo === 'coletar') def.objetivos.push({ tipo, peca: rng.escolher(r, def.pecas), alvo: 15 + Math.round(25 * d) });
+        if (tipo === 'pontos') def.objetivos.push({ tipo, alvo: arred100((30 - 12 * d) * 300 * (1 + d)) });
+        else if (tipo === 'coletar') def.objetivos.push({ tipo, peca: rng.escolher(r, def.pecas), alvo: 12 + Math.round(18 * d) });
         else if (tipo === 'limparGelatina') def.objetivos.push({ tipo, alvo: def.obstaculos.filter((o) => o.tipo === 'gelatina').reduce((s, o) => s + (o.camadas || 1), 0) });
         else if (tipo === 'limparBoiada') def.objetivos.push({ tipo, alvo: contagem.boiada });
         else if (tipo === 'limparFakeNews') def.objetivos.push({ tipo, alvo: contagem.fakenews });

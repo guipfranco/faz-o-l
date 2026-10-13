@@ -37,7 +37,7 @@ html, body { margin: 0; height: 100%; background: var(--fundo); color: var(--tex
 .icone-obra { font-size: 9px; pointer-events: none; text-anchor: middle; }
 .sigla { font-size: 7px; fill: #fff; opacity: .85; pointer-events: none; text-anchor: middle; font-weight: 700; }
 
-#painel-estado { position: absolute; right: 12px; bottom: 12px; width: min(340px, calc(100% - 24px));
+#painel-estado { position: absolute; right: 12px; top: 56px; width: min(340px, calc(100% - 24px));
   background: var(--painel); border-radius: 16px; padding: 14px; box-shadow: 0 8px 30px #0008; }
 #painel-estado h2 { margin: 0 0 8px; font-size: 20px; }
 #painel-estado .obras, #painel-estado .fases { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }

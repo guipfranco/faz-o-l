@@ -9,13 +9,13 @@
 
   M.manuais = [
     { numero: 1, linhas: 7, colunas: 7, jogadas: 20, pecas: QUATRO, obstaculos: [],
-      objetivos: [{ tipo: 'pontos', alvo: 1500 }], limiares: [1500, 2400, 3600],
+      objetivos: [{ tipo: 'pontos', alvo: 4000 }], limiares: [4000, 6000, 9000],
       dica: 'Troque duas peças vizinhas para juntar 3 iguais.' },
     { numero: 2, linhas: 8, colunas: 8, jogadas: 20, pecas: QUATRO, obstaculos: [],
       objetivos: [{ tipo: 'coletar', peca: 'lula', alvo: 12 }], limiares: [1800, 3000, 4500],
       dica: 'Junte 12 Lulas. Peças limpas por especiais também contam.' },
     { numero: 3, linhas: 8, colunas: 8, jogadas: 22, pecas: CINCO, obstaculos: [],
-      objetivos: [{ tipo: 'pontos', alvo: 3000 }], limiares: [3000, 4500, 6500],
+      objetivos: [{ tipo: 'pontos', alvo: 6000 }], limiares: [6000, 9000, 13000],
       dica: '4 em linha criam uma peça listrada: ela limpa a linha ou a coluna inteira.' },
     { numero: 4, linhas: 8, colunas: 8, jogadas: 22, pecas: CINCO, obstaculos: [],
       objetivos: [{ tipo: 'coletar', peca: 'marina', alvo: 15 }], limiares: [2500, 4000, 6000],
@@ -25,7 +25,7 @@
       objetivos: [{ tipo: 'limparGelatina', alvo: 6 }], limiares: [2500, 4000, 6000],
       dica: 'A Damares espalhou gelatina. Faça matches em cima dela para limpar.' },
     { numero: 6, linhas: 8, colunas: 8, jogadas: 22, pecas: CINCO, mascara: mascaraL(8), obstaculos: [],
-      objetivos: [{ tipo: 'pontos', alvo: 4000 }], limiares: [4000, 6000, 8500],
+      objetivos: [{ tipo: 'pontos', alvo: 7000 }], limiares: [7000, 10000, 14000],
       dica: 'Um tabuleiro em forma de L. As peças só caem onde há casa.' },
     { numero: 7, linhas: 8, colunas: 8, jogadas: 24, pecas: CINCO,
       obstaculos: [...linhaGel(2, 1, 6), ...linhaGel(5, 1, 6)],
@@ -40,7 +40,7 @@
       dica: 'Gelatina dupla: cada casa precisa de dois matches.' },
     { numero: 10, linhas: 9, colunas: 9, jogadas: 26, pecas: CINCO,
       obstaculos: [gel(2, 2), gel(2, 6), gel(6, 2), gel(6, 6), gel(4, 4), gel(4, 3), gel(4, 5), gel(3, 4), gel(5, 4), gel(0, 4)],
-      objetivos: [{ tipo: 'pontos', alvo: 9000 }, { tipo: 'limparGelatina', alvo: 10 }], limiares: [9000, 12000, 16000],
+      objetivos: [{ tipo: 'pontos', alvo: 12000 }, { tipo: 'limparGelatina', alvo: 10 }], limiares: [12000, 16000, 22000],
       dica: 'Tabuleiro 9x9. Faça 3 L na mesma fase e ganhe uma estrela extra!' },
   ];
 

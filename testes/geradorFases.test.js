@@ -24,6 +24,10 @@ test('todas as 96 fases iniciam, tem jogada, obstaculos validos e objetivos alca
     assert.ok(def.jogadas >= 10, 'fase ' + n + ' com poucas jogadas');
     assert.ok(def.objetivos.length >= 1 && def.objetivos.length <= 2);
     def.objetivos.forEach((o) => assert.ok(o.alvo > 0, 'alvo zero na fase ' + n));
+    for (const o of def.objetivos) {
+      if (o.tipo === 'coletar') assert.ok(o.alvo <= def.jogadas * 1.6, 'coletar alto demais na fase ' + n);
+      if (o.tipo === 'pontos') assert.ok(o.alvo >= def.jogadas * 200, 'pontos baixo demais na fase ' + n);
+    }
     const vistos = new Set();
     for (const o of def.obstaculos) {
       const k = o.l + ',' + o.c;

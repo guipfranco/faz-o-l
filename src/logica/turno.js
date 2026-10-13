@@ -162,7 +162,7 @@
   M.objetivosCumpridos = function (estado) { return estado.objetivos.every((o) => o.atual >= o.alvo); };
 
   function bonusFinal(estado, eventos) {
-    let n = Math.min(estado.jogadasRestantes, 10);
+    let n = Math.min(estado.jogadasRestantes, 5);
     while (n-- > 0) {
       const cand = [];
       estado.celulas.forEach((lin, l) => lin.forEach((cel, c) => { if (cel && cel.peca && !cel.especial && !cel.bloco && !cel.corrente) cand.push({ l, c }); }));
@@ -176,6 +176,8 @@
       ativarEmCadeia(estado, mapa, eventos);
       aplicarLimpeza(estado, mapa, eventos, 1);
       assentar(estado, eventos);
+      const grupos = matches.encontrarGrupos(estado.celulas);
+      if (grupos.length) resolverCascatas(estado, eventos, grupos, null, null, null);
     }
     estado.jogadasRestantes = 0;
   }
