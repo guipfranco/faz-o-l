@@ -18,7 +18,8 @@
     estado.def = def;
     obstaculos.colocar(estado, def.obstaculos || []);
     tabuleiro.preencherInicial(estado);
-    tabuleiro.garantirJogada(estado);
+    if (!tabuleiro.garantirJogada(estado)) throw new Error('fase sem jogada possivel: ' + def.numero);
+    estado.jogadasRestantesAntesDoBonus = null;
     atualizarObjetivos(estado);
     return estado;
   };
@@ -97,7 +98,7 @@
         if (r) { pontosRodada += registrarGolpe(estado, obst, r, v.l, v.c); if (r.destruido && r.tipo === 'boiada') destruiuBoiada = true; }
       }
     }
-    const ganho = pontosRodada * cascata;
+    const ganho = pontosRodada * Math.min(cascata, 5);
     estado.pontos += ganho;
     eventos.push({ tipo: 'limpar', celulas: limpas, obstaculos: obst, pontos: ganho, cascata });
     return { destruiuBoiada };
@@ -232,20 +233,22 @@
     atualizarObjetivos(estado);
     if (M.objetivosCumpridos(estado)) {
       estado.status = 'vitoria';
+      estado.jogadasRestantesAntesDoBonus = estado.jogadasRestantes;
       bonusFinal(estado, eventos);
       atualizarObjetivos(estado);
     } else if (estado.jogadasRestantes <= 0) {
       estado.status = 'derrota';
     } else if (!matches.temJogada(estado.celulas)) {
-      tabuleiro.embaralhar(estado);
-      eventos.push({ tipo: 'embaralhar' });
+      if (tabuleiro.embaralhar(estado)) eventos.push({ tipo: 'embaralhar' });
+      else { estado.status = 'derrota'; eventos.push({ tipo: 'semJogadas' }); }
     }
     eventos.push({ tipo: 'fim', status: estado.status, pontos: estado.pontos, jogadasRestantes: estado.jogadasRestantes, estrelas: M.estrelas(estado) });
     return { valido: true, eventos };
   };
 
   M.estrelas = function (estado) {
-    return pontuacao.estrelas(estado.pontos, estado.limiares, estado.contadorL, estado.status === 'vitoria');
+    const total = estado.def ? estado.def.jogadas : undefined;
+    return pontuacao.estrelas(estado.pontos, estado.limiares, estado.contadorL, estado.status === 'vitoria', estado.jogadasRestantesAntesDoBonus, total);
   };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = M;

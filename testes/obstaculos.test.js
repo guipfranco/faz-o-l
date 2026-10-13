@@ -91,6 +91,28 @@ test('fake news multiplica a cada duas chamadas', () => {
   assert.equal(obstaculos.contar(e, 'fakenews'), 2);
 });
 
+test('fake news: no maximo uma copia nova por turno; a outra guarda o contador', () => {
+  const e = estadoCom(['LAMBD', 'AMBDL', 'MBDLA', 'BDLAM', 'DLAMB']);
+  obstaculos.colocar(e, [{ tipo: 'fakenews', l: 0, c: 0 }, { tipo: 'fakenews', l: 4, c: 4 }]);
+  e.celulas[0][0].bloco.contador = 1; e.celulas[4][4].bloco.contador = 1;
+  const novas = obstaculos.avancarFakeNews(e);
+  assert.equal(novas.length, 1);
+  assert.equal(obstaculos.contar(e, 'fakenews'), 3);
+  const outra = novas[0].origem.l === 0 ? e.celulas[4][4] : e.celulas[0][0];
+  assert.equal(outra.bloco.contador, 2, 'quem nao copiou guarda o contador');
+  const depois = obstaculos.avancarFakeNews(e);
+  assert.equal(depois.length, 1, 'a outra copia no turno seguinte');
+  assert.notDeepEqual(depois[0].origem, novas[0].origem);
+});
+
+test('bloco que cai em cima de gelatina nao apaga a gelatina', () => {
+  const e = estadoCom(['LA', 'MB']);
+  obstaculos.colocar(e, [{ tipo: 'gelatina', l: 0, c: 0, camadas: 2 }, { tipo: 'fakenews', l: 0, c: 0 }]);
+  assert.equal(e.celulas[0][0].bloco.tipo, 'fakenews');
+  assert.equal(e.celulas[0][0].gelatina, 2);
+  assert.equal(obstaculos.contar(e, 'gelatina'), 2);
+});
+
 test('chefe ataca na terceira jogada com gelatina ou fake news', () => {
   const e = estadoCom(['LAMB', 'AMBD', 'MBDL', 'BDLA']);
   obstaculos.colocar(e, [{ tipo: 'chefe', l: 0, c: 1, vida: 9 }]);

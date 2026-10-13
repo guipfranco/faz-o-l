@@ -91,7 +91,8 @@
   };
 
   M.garantirJogada = function (estado) {
-    if (!matches.temJogada(estado.celulas)) M.embaralhar(estado);
+    if (matches.temJogada(estado.celulas)) return true;
+    return M.embaralhar(estado);
   };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = M;

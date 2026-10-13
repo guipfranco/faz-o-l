@@ -319,6 +319,9 @@
             await this.tw({ targets: Object.values(this.sprites).map((s) => s.peca), alpha: 0, duration: 250 });
             this.sincronizar();
             break;
+          case 'semJogadas':
+            this.mostrarAviso('Sem jogadas possíveis: fim da fase.', 2500);
+            break;
           case 'fim':
             this.atualizarHUD();
             if (ev.status === 'vitoria') this.voz.falar({ personagem: 'lula', gatilho: 'vitoria' });

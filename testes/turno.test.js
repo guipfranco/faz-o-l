@@ -24,6 +24,25 @@ test('estrelas: 0 sem vitoria, minimo 1 com vitoria, bonus por 3 L', () => {
   assert.equal(pontuacao.estrelas(250, [100, 200, 300], 0, false), 0);
   assert.equal(pontuacao.estrelas(50, [100, 200, 300], 0, true), 1);
   assert.equal(pontuacao.estrelas(350, [100, 200, 300], 3, true), 4);
+  assert.equal(pontuacao.estrelas(350, [100, 200, 300], 3, true, 10, 10), 4, 'teto de 4');
+});
+
+test('estrelas: vitoria com 60% das jogadas sobrando vale 3 mesmo com poucos pontos', () => {
+  assert.equal(pontuacao.estrelas(50, [100, 200, 300], 0, true, 6, 10), 3);
+  assert.equal(pontuacao.estrelas(50, [100, 200, 300], 0, true, 3, 10), 2);
+  assert.equal(pontuacao.estrelas(50, [100, 200, 300], 0, true, 1, 10), 1);
+  assert.equal(pontuacao.estrelas(250, [100, 200, 300], 0, true, 1, 10), 2, 'pontos ainda contam');
+  assert.equal(pontuacao.estrelas(50, [100, 200, 300], 0, false, 6, 10), 0);
+});
+
+test('turno.estrelas usa as jogadas restantes de antes do bonus final', () => {
+  const e = estadoCom(['LAMB', 'AMBD', 'LBDM', 'ALLA'], { objetivos: [{ tipo: 'coletar', peca: 'lula', alvo: 3 }], jogadas: 10 });
+  const r = turno.jogar(e, { l: 2, c: 0 }, { l: 3, c: 0 });
+  assert.equal(e.status, 'vitoria');
+  assert.equal(e.jogadasRestantesAntesDoBonus, 9);
+  assert.equal(e.jogadasRestantes, 0);
+  assert.ok(turno.estrelas(e) >= 3);
+  assert.equal(r.eventos[r.eventos.length - 1].estrelas, turno.estrelas(e));
 });
 
 test('iniciarFase coloca obstaculos, preenche e garante jogada', () => {
@@ -157,6 +176,41 @@ test('bloco do Bolsonaro leva golpe por adjacencia e quebra no segundo', () => {
   const golpe = limpar.obstaculos.find((o) => o.tipo === 'bolsonaro');
   assert.deepEqual({ destruido: golpe.destruido, vida: golpe.vida }, { destruido: false, vida: 1 });
   assert.equal(e.celulas[2][1].bloco.vida, 1);
+});
+
+test('sem jogada possivel e sem embaralhamento valido: derrota com evento semJogadas', () => {
+  // tabuleiro 1x4: depois do match sobram 4 pecas aleatorias e quase nunca ha jogada
+  const e = estadoCom(['LALL', '####'], { jogadas: 5 });
+  const r = turno.jogar(e, { l: 0, c: 0 }, { l: 0, c: 1 });
+  assert.ok(r.valido);
+  assert.equal(matches.temJogada(e.celulas), false);
+  assert.equal(e.status, 'derrota');
+  const t = tipos(r.eventos);
+  assert.ok(t.includes('semJogadas'));
+  assert.ok(!t.includes('embaralhar'));
+  assert.deepEqual(t.slice(-2), ['semJogadas', 'fim']);
+  assert.equal(r.eventos[r.eventos.length - 1].status, 'derrota');
+});
+
+test('tabuleiro cheio de fake news: ou ainda ha jogada, ou a fase termina (nunca trava)', () => {
+  const obst = [];
+  for (let l = 0; l < 2; l++) for (let c = 0; c < 4; c++) obst.push({ tipo: 'fakenews', l, c });
+  obst.push({ tipo: 'corrente', l: 3, c: 3 });
+  const e = estadoCom(['LAMB', 'AMBD', 'LBDM', 'ALLA'], { jogadas: 5, obstaculos: obst });
+  const r = turno.jogar(e, { l: 2, c: 0 }, { l: 3, c: 0 });
+  assert.ok(r.valido);
+  const tem = matches.temJogada(e.celulas);
+  const caminho = tem ? 'ha jogada' : 'sem jogada';
+  if (tem) assert.equal(e.status, 'jogando', caminho);
+  else {
+    assert.equal(e.status, 'derrota', caminho);
+    assert.ok(r.eventos.some((x) => x.tipo === 'semJogadas'), caminho);
+  }
+});
+
+test('iniciarFase lanca erro quando a fase nao tem jogada possivel', () => {
+  const def = { ...DEF, numero: 77, linhas: 1, colunas: 2 };
+  assert.throws(() => turno.iniciarFase(def, 3), /fase sem jogada possivel: 77/);
 });
 
 test('derrota quando as jogadas acabam com objetivo pendente', () => {

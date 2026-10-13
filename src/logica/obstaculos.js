@@ -10,7 +10,7 @@
   function celulaEm(estado, l, c) { const lin = estado.celulas[l]; return lin ? lin[c] || null : null; }
 
   function bloquear(cel, bloco) {
-    cel.peca = null; cel.especial = null; cel.gelatina = 0; cel.corrente = false; cel.bloco = bloco;
+    cel.peca = null; cel.especial = null; cel.corrente = false; cel.bloco = bloco;
   }
 
   M.colocar = function (estado, lista) {
@@ -90,20 +90,21 @@
     return { l: alvo.l, c: alvo.c };
   };
 
+  // Cada fake news conta jogadas; ao chegar a 2 tenta se copiar para um vizinho livre.
+  // No maximo uma copia nova por turno: as outras guardam o contador e copiam depois.
   M.avancarFakeNews = function (estado) {
-    const novas = [];
-    for (const p of posicoesDeBloco(estado, 'fakenews')) {
-      const b = celulaEm(estado, p.l, p.c).bloco;
-      b.contador = (b.contador || 0) + 1;
+    const blocos = posicoesDeBloco(estado, 'fakenews').map((p) => ({ p, b: celulaEm(estado, p.l, p.c).bloco }));
+    for (const x of blocos) x.b.contador = (x.b.contador || 0) + 1;
+    for (const { p, b } of blocos) {
       if (b.contador < 2) continue;
-      b.contador = 0;
       const livres = vizinhosLivres(estado, p.l, p.c);
       if (!livres.length) continue;
+      b.contador = 0;
       const alvo = rng.escolher(estado.rng, livres);
       bloquear(celulaEm(estado, alvo.l, alvo.c), { tipo: 'fakenews', vida: 1, contador: 0 });
-      novas.push({ l: alvo.l, c: alvo.c, origem: { l: p.l, c: p.c } });
+      return [{ l: alvo.l, c: alvo.c, origem: { l: p.l, c: p.c } }];
     }
-    return novas;
+    return [];
   };
 
   M.turnoChefe = function (estado) {
