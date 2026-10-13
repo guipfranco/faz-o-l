@@ -68,7 +68,7 @@
       const uf = D.estados.porSigla[this.def.estado];
       const estilo = (tam, cor, peso) => ({ fontFamily: FONTE, fontSize: tam + 'px', color: cor || '#f4f4f4', fontStyle: peso || 'bold' });
       this.add.text(20, 14, 'Fase ' + this.def.numero + ' · ' + (uf ? uf.nome : ''), estilo(20, '#ffdf00')).setDepth(10);
-      this.add.text(LARG - 20, 14, 'Mapa', estilo(18)).setOrigin(1, 0).setDepth(10).setInteractive({ useHandCursor: true }).on('pointerdown', () => this.sair('mapa'));
+      this.add.text(LARG - 20, 14, 'Mapa', estilo(18)).setOrigin(1, 0).setDepth(10).setInteractive({ useHandCursor: true }).on('pointerdown', () => { if (!this.ocupado) this.sair('mapa'); });
       this.btnMudo = this.add.text(LARG - 90, 12, this.voz.mudo() ? '🔇' : '🔊', estilo(20)).setOrigin(1, 0).setDepth(10).setInteractive({ useHandCursor: true })
         .on('pointerdown', () => { raiz.FazOL.ui.alternarMudo(); this.btnMudo.setText(this.voz.mudo() ? '🔇' : '🔊'); });
       this.txtJogadas = this.add.text(20, 46, '', estilo(44)).setDepth(10);
@@ -104,6 +104,7 @@
       cont.add(this.add.image(0, 0, 'peca-' + cel.peca).setDisplaySize(TAM - 8, TAM - 8));
       this.decorarEspecial(cont, cel.especial);
       cont.setSize(TAM, TAM);
+      cont.dados = { peca: cel.peca };
       return cont;
     }
     decorarEspecial(cont, especial) {
@@ -167,7 +168,7 @@
     configurarInput() {
       this.input.on('pointerdown', (p) => {
         if (this.ocupado || this.terminou) return;
-        this.cancelarDica();
+        this.agendarDica();
         const cel = this.celulaEmPixel(p.x, p.y);
         if (!cel) { this.selecionar(null); return; }
         if (this.selecionada && Math.abs(this.selecionada.l - cel.l) + Math.abs(this.selecionada.c - cel.c) === 1) {
@@ -199,7 +200,7 @@
     async tentarJogada(a, b) {
       if (this.ocupado || this.terminou) return;
       const r = L.turno.jogar(this.estado, a, b);
-      if (!r.valido && !r.eventos.length) { this.tremer(a); return; }
+      if (!r.valido && !r.eventos.length) { this.tremer(a); this.agendarDica(); return; }
       this.ocupado = true;
       this.cancelarDica();
       try { await this.animar(r.eventos); } catch (e) { console.error('animacao', e); }
@@ -256,7 +257,7 @@
           }
           case 'limpar': {
             const golpes = ev.obstaculos.filter((o) => o.tipo !== 'gelatina' && o.tipo !== 'corrente');
-            const destaque = golpes.find((o) => o.destruido) || golpes[0] || ev.obstaculos[0];
+            const destaque = golpes.find((o) => o.destruido) || golpes[0];
             if (destaque) this.voz.falar({ personagem: L.obstaculos.PERSONAGEM[destaque.tipo], gatilho: 'match' });
             else if (falaPendente) this.voz.falar(falaPendente);
             falaPendente = null;
@@ -278,7 +279,9 @@
               const kd = this.chave(m.de), kp = this.chave(m.para);
               const s = this.sprites[kd] && this.sprites[kd].peca; if (!s) continue;
               this.sprites[kd].peca = null;
-              this.sprites[kp] = this.sprites[kp] || {}; this.sprites[kp].peca = s;
+              this.sprites[kp] = this.sprites[kp] || {};
+              if (this.sprites[kp].peca && this.sprites[kp].peca !== s) this.sprites[kp].peca.destroy();
+              this.sprites[kp].peca = s;
               const p = this.pos(m.para.l, m.para.c);
               promessas.push(this.tw({ targets: s, y: p.y, duration: 90 + 50 * (m.para.l - m.de.l), ease: 'Quad.easeIn' }));
             }
@@ -292,6 +295,7 @@
               const s = this.criarPeca(n.l, n.c, { peca: n.peca, especial: null });
               const p = this.pos(n.l, n.c);
               s.y = this.origemY - TAM * (1 + (n.l % 3));
+              if (this.sprites[k] && this.sprites[k].peca) this.sprites[k].peca.destroy();
               this.sprites[k] = Object.assign(this.sprites[k] || {}, { peca: s });
               promessas.push(this.tw({ targets: s, y: p.y, duration: 220 + 40 * n.l, ease: 'Quad.easeIn' }));
             }
@@ -299,7 +303,17 @@
             break;
           }
           case 'boiadaEspalhou': this.voz.falar({ personagem: 'salles', gatilho: 'boiada' }); this.sincronizar(); this.pulsar(ev); await espera(this, 150); break;
-          case 'fakeNewsMultiplicou': case 'chefeAtacou': case 'bonusJogada': this.sincronizar(); this.pulsar(ev); await espera(this, 140); break;
+          case 'fakeNewsMultiplicou': case 'chefeAtacou': this.sincronizar(); this.pulsar(ev); await espera(this, 140); break;
+          case 'bonusJogada': {
+            // Nao sincroniza: this.estado ja e o estado final, e os eventos seguintes animam a partir daqui.
+            const k = this.chave(ev), velho = this.sprites[k] && this.sprites[k].peca;
+            const peca = velho && velho.dados ? velho.dados.peca : 'lula';
+            if (velho) velho.destroy();
+            this.sprites[k] = Object.assign(this.sprites[k] || {}, { peca: this.criarPeca(ev.l, ev.c, { peca, especial: ev.especial }) });
+            this.pulsar(ev);
+            await espera(this, 140);
+            break;
+          }
           case 'embaralhar':
             this.mostrarAviso('Sem jogadas possíveis: embaralhando!', 1800);
             await this.tw({ targets: Object.values(this.sprites).map((s) => s.peca), alpha: 0, duration: 250 });
@@ -385,8 +399,9 @@
     }
     mostrarAviso(texto, ms) {
       if (this.aviso) this.aviso.destroy();
-      this.aviso = this.add.text(LARG / 2, ALT - 28, texto, { fontFamily: FONTE, fontSize: '17px', color: '#f4f4f4', backgroundColor: '#1f1f2b', padding: { x: 12, y: 6 }, align: 'center', wordWrap: { width: LARG - 60 } }).setOrigin(0.5).setDepth(10);
-      this.time.delayedCall(ms || 2500, () => { if (this.aviso) { this.aviso.destroy(); this.aviso = null; } });
+      const t = this.add.text(LARG / 2, ALT - 28, texto, { fontFamily: FONTE, fontSize: '17px', color: '#f4f4f4', backgroundColor: '#1f1f2b', padding: { x: 12, y: 6 }, align: 'center', wordWrap: { width: LARG - 60 } }).setOrigin(0.5).setDepth(10);
+      this.aviso = t;
+      this.time.delayedCall(ms || 2500, () => { if (this.aviso === t) { t.destroy(); this.aviso = null; } });
     }
     resultado() { return { numero: this.def.numero, status: this.estado.status, pontos: this.estado.pontos, estrelas: L.turno.estrelas(this.estado), contadorL: this.estado.contadorL }; }
     terminar() {
@@ -400,7 +415,7 @@
       if (this.saindo) return;
       this.saindo = true;
       this.cancelarDica();
-      const final = resultado || Object.assign(this.resultado(), { status: 'abandono', estrelas: 0 });
+      const final = resultado || (this.estado.status !== 'jogando' ? this.resultado() : Object.assign(this.resultado(), { status: 'abandono', estrelas: 0 }));
       if (this.scene.isActive('FimDeFase')) this.scene.stop('FimDeFase');
       raiz.FazOL.ui.cenaAtual = null;
       // scene.stop() so entra na fila do SceneManager; se aoTerminar iniciasse a proxima fase
