@@ -142,7 +142,7 @@
       for (let l = 0; l < e.linhas; l++) for (let c = 0; c < e.colunas; c++) {
         const cel = e.celulas[l][c]; if (!cel) continue;
         const k = this.chave({ l, c }), p = this.pos(l, c), s = {};
-        if (cel.gelatina > 0) s.gel = this.add.image(p.x, p.y, 'obst-damares').setDisplaySize(TAM - 2, TAM - 2).setAlpha(cel.gelatina >= 2 ? 1 : 0.6).setDepth(1);
+        if (cel.gelatina > 0) s.gel = this.add.image(p.x, p.y, 'obst-damares').setDisplaySize(TAM - 2, TAM - 2).setAlpha(cel.gelatina >= 2 ? 1 : 0.85).setDepth(1);
         if (cel.peca) s.peca = this.criarPeca(l, c, cel);
         if (cel.bloco && cel.bloco.tipo !== 'chefe') {
           s.obst = this.add.image(p.x, p.y, TEX_OBST[cel.bloco.tipo]).setDisplaySize(TAM - 6, TAM - 6).setDepth(3);
@@ -340,7 +340,7 @@
       }
       for (const o of ev.obstaculos) {
         const k = this.chave(o), s = this.sprites[k] || {}, p = this.pos(o.l, o.c);
-        if (o.tipo === 'gelatina') { this.particulas(p.x, p.y, 0xff5fa2, 8); if (s.gel) { if (o.destruido) { alvos.push(s.gel); s.gel = null; } else s.gel.setAlpha(0.6); } }
+        if (o.tipo === 'gelatina') { this.particulas(p.x, p.y, 0xff5fa2, 8); if (s.gel) { if (o.destruido) { alvos.push(s.gel); s.gel = null; } else s.gel.setAlpha(0.85); } }
         else if (o.tipo === 'corrente') { this.particulas(p.x, p.y, 0x9aa0a6, 8); if (s.corrente) { alvos.push(s.corrente); s.corrente = null; } }
         else if (o.tipo === 'chefe') { this.particulas(p.x, p.y, 0xc8102e, 14); if (this.spriteChefe) this.tweens.add({ targets: this.spriteChefe, x: this.spriteChefe.x + 6, duration: 40, yoyo: true, repeat: 3 }); }
         else {

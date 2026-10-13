@@ -164,6 +164,7 @@
   function bonusFinal(estado, eventos) {
     let n = Math.min(estado.jogadasRestantes, 5);
     while (n-- > 0) {
+      const antes = estado.pontos; const idx = eventos.length;
       const cand = [];
       estado.celulas.forEach((lin, l) => lin.forEach((cel, c) => { if (cel && cel.peca && !cel.especial && !cel.bloco && !cel.corrente) cand.push({ l, c }); }));
       if (!cand.length) break;
@@ -178,6 +179,8 @@
       assentar(estado, eventos);
       const grupos = matches.encontrarGrupos(estado.celulas);
       if (grupos.length) resolverCascatas(estado, eventos, grupos, null, null, null);
+      for (const ev of eventos.slice(idx)) if (ev.tipo === 'limpar') ev.pontos = Math.round(ev.pontos / 10);
+      estado.pontos = antes + Math.round((estado.pontos - antes) / 10);
     }
     estado.jogadasRestantes = 0;
   }

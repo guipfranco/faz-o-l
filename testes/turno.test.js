@@ -203,7 +203,13 @@ test('gelatina embaixo da celula de nascimento da especial tambem some', () => {
 
 test('bonus final nao deixa grupos no tabuleiro', () => {
   const e = estadoCom(['LAMB', 'AMBD', 'LBDM', 'ALLA'], { objetivos: [{ tipo: 'pontos', alvo: 100 }], jogadas: 12 });
-  turno.jogar(e, { l: 2, c: 0 }, { l: 3, c: 0 });
+  const r = turno.jogar(e, { l: 2, c: 0 }, { l: 3, c: 0 });
   assert.equal(e.status, 'vitoria');
   assert.equal(matches.encontrarGrupos(e.celulas).length, 0);
+  const i = r.eventos.findIndex((x) => x.tipo === 'bonusJogada');
+  const bonus = r.eventos.slice(i).filter((x) => x.tipo === 'limpar').reduce((s, x) => s + x.pontos, 0);
+  assert.ok(i > 0 && bonus > 0 && bonus <= 1500, 'bonus modesto: ' + bonus);
+  const total = r.eventos.filter((x) => x.tipo === 'limpar').reduce((s, x) => s + x.pontos, 0);
+  assert.equal(r.eventos[r.eventos.length - 1].pontos, e.pontos);
+  assert.ok(Math.abs(total - e.pontos) <= 5, 'soma ' + total + ' vs ' + e.pontos);
 });
