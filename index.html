@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Faz o L</title>
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<div id="menu" class="tela">
+  <h1>Faz o <span class="l">L</span></h1>
+  <p>Junte os aliados, derrube os obstáculos e reconstrua o Brasil, estado por estado.</p>
+  <button id="btn-jogar" class="botao grande">Jogar</button>
+  <button id="btn-apagar" class="botao secundario">Apagar progresso</button>
+  <p class="rodape">Frases reais, com fonte em <code>dados/frases.js</code>. Projeto independente.</p>
+</div>
+
+<div id="mapa" class="tela" hidden>
+  <header class="barra">
+    <span id="estrelas-disponiveis">⭐ 0</span>
+    <span id="titulo-mapa">Reconstruindo o Brasil</span>
+    <button id="btn-menu" class="botao pequeno">Menu</button>
+  </header>
+  <div id="mapa-svg"></div>
+  <aside id="painel-estado"></aside>
+</div>
+
+<div id="jogo" hidden></div>
+<div id="balao" hidden><strong id="balao-nome"></strong><span id="balao-texto"></span></div>
+<div id="confete" hidden></div>
+
+<script src="lib/phaser.min.js"></script>
+<script src="src/namespace.js"></script>
+<script src="dados/estados.js"></script>
+<script src="dados/frases.js"></script>
+<script src="dados/fases.js"></script>
+<script src="dados/mapaBr.js"></script>
+<script src="src/logica/rng.js"></script>
+<script src="src/logica/matches.js"></script>
+<script src="src/logica/tabuleiro.js"></script>
+<script src="src/logica/especiais.js"></script>
+<script src="src/logica/obstaculos.js"></script>
+<script src="src/logica/pontuacao.js"></script>
+<script src="src/logica/turno.js"></script>
+<script src="src/logica/geradorFases.js"></script>
+<script src="src/progresso.js"></script>
+<script src="src/voz.js"></script>
+<script src="src/mapa.js"></script>
+<script src="src/cenas/CenaTabuleiro.js"></script>
+<script src="src/cenas/CenaFimDeFase.js"></script>
+<script src="src/main.js"></script>
+</body>
+</html>
