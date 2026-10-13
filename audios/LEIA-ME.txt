@@ -1,7 +1,7 @@
 ÁUDIOS DO FAZ O L
 
 Coloque nesta pasta arquivos .mp3 com os nomes abaixo. Quando o arquivo existe, o jogo toca o clipe;
-quando não existe, o Chrome lê o texto com voz sintetizada; frases marcadas como "só áudio" ficam mudas sem arquivo.
+quando não existe, a frase aparece só no balão, sem som. O jogo não usa voz sintetizada.
 Os marcados com [MDB] vêm do acervo do app Medo e Delírio em Brasília (github.com/rafaelclaycon/MedoDelirioBrasilia)
 e são baixados com: node ferramentas/puxar-audios.js
 

@@ -12,7 +12,7 @@ const FRASES = [
 
 function ambiente(opts) {
   const existentes = new Set(opts && opts.existentes || []);
-  const reg = { tocados: [], sintetizados: [], baloes: [], timers: [] };
+  const reg = { tocados: [], baloes: [], timers: [] };
   let t = 0;
   const env = {
     reg,
@@ -20,7 +20,6 @@ function ambiente(opts) {
     api: voz.criar({
       frases: FRASES, nomes: { lula: 'Lula', flavio: 'Flávio' },
       criarAudio: (url) => ({ url, volume: 1, onerror: null, play() { reg.tocados.push(url); if (!existentes.has(url)) { const self = this; return Promise.reject(new Error('404')).catch((e) => { if (self.onerror) self.onerror(); throw e; }); } return Promise.resolve(); } }),
-      sintetizar: (texto) => reg.sintetizados.push(texto),
       aoBalao: (b) => reg.baloes.push(b),
       agora: () => t,
       agendar: (fn, ms) => reg.timers.push({ fn, em: t + ms }),
@@ -32,20 +31,19 @@ function ambiente(opts) {
 }
 const tick = () => new Promise((r) => setImmediate(r));
 
-test('mp3 existente toca e nao sintetiza', async () => {
+test('mp3 existente toca', async () => {
   const env = ambiente({ existentes: ['audios/lula-a.mp3', 'audios/lula-b.mp3', 'audios/lula-c.mp3'] });
   env.api.falar({ personagem: 'lula' });
   await tick();
   assert.equal(env.reg.tocados.length, 1);
-  assert.equal(env.reg.sintetizados.length, 0);
   assert.equal(env.reg.baloes[0].nome, 'Lula');
 });
 
-test('sem mp3 cai para voz sintetizada com o texto', async () => {
+test('sem mp3 fica so o balao, sem voz sintetizada', async () => {
   const env = ambiente();
   env.api.falar({ personagem: 'lula', gatilho: 'L' });
   await tick(); await tick();
-  assert.deepEqual(env.reg.sintetizados, ['Faz o L']);
+  assert.deepEqual(env.reg.tocados, ['audios/lula-l.mp3']);
   assert.equal(env.reg.baloes[0].texto, 'Faz o L');
 });
 
@@ -53,7 +51,6 @@ test('somenteAudio sem arquivo: so balao com o nome', async () => {
   const env = ambiente();
   env.api.falar({ personagem: 'flavio' });
   await tick(); await tick();
-  assert.equal(env.reg.sintetizados.length, 0);
   assert.equal(env.reg.baloes.length, 1);
   assert.equal(env.reg.baloes[0].nome, 'Flávio');
   assert.equal(env.reg.baloes[0].texto, '');
@@ -88,5 +85,4 @@ test('gatilho sem frase cai em match; mudo mostra balao sem som', async () => {
   assert.equal(env.reg.baloes.length, 1);
   assert.ok(['A', 'B', 'C'].includes(env.reg.baloes[0].texto));
   assert.equal(env.reg.tocados.length, 0);
-  assert.equal(env.reg.sintetizados.length, 0);
 });

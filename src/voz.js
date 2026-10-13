@@ -6,7 +6,6 @@
     const frases = opts.frases || [];
     const nomes = opts.nomes || {};
     const criarAudio = opts.criarAudio || null;
-    const sintetizar = opts.sintetizar || null;
     const aoBalao = opts.aoBalao || function () {};
     const agora = opts.agora || (() => Date.now());
     const agendar = opts.agendar || ((fn, ms) => setTimeout(fn, ms));
@@ -41,22 +40,17 @@
       estado.historico.push(item);
       const frase = item.frase;
       aoBalao({ personagem: item.personagem, nome: nomes[item.personagem] || item.personagem, texto: frase && frase.texto ? frase.texto : '' });
-      if (estado.mudo || !frase) return;
-      let caiu = false;
-      const fallback = () => {
-        if (caiu) return;
-        caiu = true;
-        if (!frase.somenteAudio && frase.texto && sintetizar) sintetizar(frase.texto, estado.volume);
-      };
-      if (!criarAudio) { fallback(); return; }
+      if (estado.mudo || !frase || !criarAudio) return;
+      // Só toca gravação real; sem o mp3 fica apenas o balão.
+      const silencio = () => {};
       let audio;
-      try { audio = criarAudio(pasta + frase.id + '.mp3'); } catch (e) { fallback(); return; }
+      try { audio = criarAudio(pasta + frase.id + '.mp3'); } catch (e) { return; }
       try { audio.volume = estado.volume; } catch (e) { /* ignora */ }
-      audio.onerror = fallback;
+      audio.onerror = silencio;
       try {
         const p = audio.play();
-        if (p && typeof p.catch === 'function') p.catch(fallback);
-      } catch (e) { fallback(); }
+        if (p && typeof p.catch === 'function') p.catch(silencio);
+      } catch (e) { /* sem áudio: segue em silêncio */ }
     }
 
     function processar() {

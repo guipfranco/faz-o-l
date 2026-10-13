@@ -23,17 +23,7 @@
     timerBalao = setTimeout(() => { balao.hidden = true; }, 3500);
   }
 
-  function sintetizarNavegador(texto, volume) {
-    if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === 'undefined') return;
-    const u = new SpeechSynthesisUtterance(texto);
-    u.lang = 'pt-BR'; u.volume = volume; u.rate = 1.05;
-    const voz = (window.speechSynthesis.getVoices() || []).find((v) => /^pt(-|_)?BR/i.test(v.lang)) || (window.speechSynthesis.getVoices() || []).find((v) => /^pt/i.test(v.lang));
-    if (voz) u.voice = voz;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(u);
-  }
-
-  const voz = F.voz.criar({ frases: frases.lista, nomes: frases.NOMES, criarAudio: (url) => new Audio(url), sintetizar: sintetizarNavegador, aoBalao: mostrarBalao });
+  const voz = F.voz.criar({ frases: frases.lista, nomes: frases.NOMES, criarAudio: (url) => new Audio(url), aoBalao: mostrarBalao });
   voz.mudo(progresso.audio().mudo);
   voz.volume(progresso.audio().volume);
 
@@ -57,7 +47,7 @@
     } catch (e) { /* sem áudio: segue em silêncio */ }
   }
 
-  function alternarMudo() { const m = !voz.mudo(); voz.mudo(m); progresso.definirAudio({ mudo: m }); if (m && window.speechSynthesis) window.speechSynthesis.cancel(); return m; }
+  function alternarMudo() { const m = !voz.mudo(); voz.mudo(m); progresso.definirAudio({ mudo: m }); return m; }
 
   const mapa = F.ui.mapa.criar({
     raizEl: el('mapa'), svgEl: el('mapa-svg'), painelEl: el('painel-estado'), estrelasEl: el('estrelas-disponiveis'), confeteEl: el('confete'),
